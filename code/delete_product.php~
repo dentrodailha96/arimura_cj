@@ -1,0 +1,32 @@
+<?php
+    include("db_connection.php");
+    
+    // Get the product ID to delete
+    $id = $_REQUEST['p_id_product'];
+    
+    // SQL DELETE query
+    $textsql = "DELETE FROM products WHERE id = $id";
+    
+    // Debugging: print the query
+    echo "Executing: " . $textsql . "<br>";
+    
+    // Execute the query
+    $result = pg_query($con, $textsql);
+    
+    if (!$result) {
+        echo "An error occurred during the delete.<br>";
+        echo "PostgreSQL Error: " . pg_last_error($con) . "<br>";
+        exit;
+    }
+    
+    // Check how many rows were affected
+    $affected_rows = pg_affected_rows($result);
+    
+    if ($affected_rows > 0) {
+        echo "Product deleted successfully! ($affected_rows row(s) affected)";
+    } else {
+        echo "No product was deleted. Maybe the ID doesn't exist?";
+    }
+    
+    pg_close($con);
+?>

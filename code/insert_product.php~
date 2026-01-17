@@ -8,7 +8,7 @@
    $sales_unit = $_REQUEST['p_sales_unit'];
 
    // We list columns in the first ( ), and values in the second ( )
-   $textsql = "INSERT INTO products (name, price_product, sales_unit, last_modified) 
+   $textsql = "INSERT INTO public.products (name, price_product, sales_unit, last_modified) 
                VALUES ('$name', '$price', '$sales_unit', now())";
 
 	// Debugging: This will print the query to your screen
