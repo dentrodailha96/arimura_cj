@@ -1,0 +1,11 @@
+#Use PHP with Apache Webserver (official image below)
+FROM php:8.2-apache 
+
+#define work directory
+WORKDIR /var/www/html/
+
+# Copy your application files into the container
+COPY . /var/www/html/
+
+# Expose port 80 for the web server
+EXPOSE 80
