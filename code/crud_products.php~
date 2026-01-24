@@ -194,10 +194,10 @@
             priceField.style.display = "block";
             unitField.style.display = "block";
         } else if (operation == "delete")  {
-            idField.style.display = "none";
-            nameField.style.display = "block";
-            priceField.style.display = "block";
-            unitField.style.display = "block";
+            idField.style.display = "block";
+            nameField.style.display = "none";
+            priceField.style.display = "none";
+            unitField.style.display = "none";
         }     
     }
 </script>
