@@ -25,13 +25,16 @@ jobs:
     steps:
       - name: Checkout the repo 
         uses: actions/checkout@v2
-
-      - name: Calculate short SHA
+        uses: benjlevesque/short-sha@v3.0
         id: short-sha
-        uses: hudsonm62/short-sha@v1
+          with: 6
         
+      - run: echo $SHA
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
+
       - name: Build container image
-        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.calc_sha.outputs.sha }}  .
+        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}  .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -45,7 +48,7 @@ jobs:
         run: if [ ! -z "$(doctl registry repository list | grep "${{ vars.IMAGE_NAME}}")" ]; then doctl registry repository delete-manifest ${{ vars.IMAGE_NAME}} $(doctl registry repository list-tags ${{ vars.IMAGE_NAME}} | grep -o "sha.*") --force; else echo "No repository"; fi
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.calc_sha.outputs.sha }}
+        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}
         
   deploy:
     runs-on: ubuntu-latest
@@ -71,4 +74,4 @@ jobs:
             docker run -d \
             --restart always \
             --name ${{ vars.IMAGE_NAME}} \
-            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.calc_sha.outputs-.sha }}
+            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}
