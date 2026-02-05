@@ -15,7 +15,7 @@ on:
         required: true
 #2
 env:
-  REGISTRY: $REGISTRY
+  REGISTRY: $REGISTRY 
   IMAGE_NAME: $IMAGE_NAME
 
 #3
