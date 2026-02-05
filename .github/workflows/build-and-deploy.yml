@@ -27,7 +27,8 @@ jobs:
         uses: actions/checkout@v2
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
-          with: 6
+          with: 
+             lenght: 6
         
       - run: echo $SHA
         env:
