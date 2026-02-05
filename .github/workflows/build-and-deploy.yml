@@ -15,8 +15,8 @@ on:
         required: true
 #2
 env:
-  REGISTRY: $REGISTRY 
-  IMAGE_NAME: $IMAGE_NAME
+  REGISTRY: ${{ vars.REGISTRY}} 
+  IMAGE_NAME: ${{ vars.IMAGE_NAME}}
 
 #3
 jobs:
@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Build container image
-        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
+        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -38,10 +38,10 @@ jobs:
         run: doctl registry login --expiry-seconds 600
       
       - name: Remove all old images
-        run: if [ ! -z "$(doctl registry repository list | grep "$(echo $IMAGE_NAME)")" ]; then doctl registry repository delete-manifest $(echo $IMAGE_NAME) $(doctl registry repository list-tags $(echo $IMAGE_NAME) | grep -o "sha.*") --force; else echo "No repository"; fi
+        run: if [ ! -z "$(doctl registry repository list | grep "${{ vars.IMAGE_NAME}}")" ]; then doctl registry repository delete-manifest ${{ vars.IMAGE_NAME}} $(doctl registry repository list-tags ${{ vars.IMAGE_NAME}} | grep -o "sha.*") --force; else echo "No repository"; fi
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7)
         
   deploy:
     runs-on: ubuntu-latest
@@ -60,11 +60,11 @@ jobs:
             # Login to registry
             docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
             # Stop running container
-            docker stop $(echo $IMAGE_NAME)
+            docker stop ${{ vars.IMAGE_NAME}}
             # Remove old container
-            docker rm $(echo $IMAGE_NAME)
+            docker rm ${{ vars.IMAGE_NAME}}
             # Run a new container from a new image
             docker run -d \
             --restart always \
-            --name $(echo $IMAGE_NAME) \
-            $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+            --name ${{ vars.IMAGE_NAME}} \
+            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:$(echo $GITHUB_SHA | head -c7)
