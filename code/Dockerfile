@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 #define work directory
-WORKDIR /var/www/html
+WORKDIR /arimura_cj/code
 
 # Copy your application files into the container
 COPY . /var/www/html/
