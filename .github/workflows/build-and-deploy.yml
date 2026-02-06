@@ -48,14 +48,8 @@ jobs:
       
       - name: Remove all old images
         run: |
-            if doctl registry repository list | grep -q "${{ vars.IMAGE_NAME }}"; then 
-              TAGS=$(doctl registry repository list-tags ${{ vars.IMAGE_NAME }} --format Tag --no-header)
-              if [ ! -z "$TAGS" ]; then
-                echo "$TAGS" | xargs -I {} doctl registry repository delete-manifest ${{ vars.IMAGE_NAME }} {} --force
-            fi
-            else 
-              echo "No repository"
-            fi
+            doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} ${{ steps.short-sha.outputs.sha }} --force ||
+            echo "Tag doesn't exist yet"
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}
