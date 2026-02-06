@@ -48,7 +48,7 @@ jobs:
       
       - name: Remove all old images
         run:  | 
-          if doctl registry repository list | grep -q "${{ var.IMAGE_NAME }}"; then TAGS=$(doctl regristry repository list-tags ${{ vars.IMAGE_NAME }} --format Tag --no-header)
+          if doctl registry repository list | grep -q "${{ vars.IMAGE_NAME }}"; then TAGS=$(doctl regristry repository list-tags ${{ vars.IMAGE_NAME }} --format Tag --no-header)
           if [ ! -z "$TAGS" ]; then echo "$TAGS"
           | xargs -I {} doctl regirstry repository delete-manifest ${{ vars.IMAGE_NAME }} $(doctl registry list-tags ${{ vars.IMAGE_NAME }}
           | grep -oE '[a-f0-9]{7,40}') -- force else echo "No repository" fi
