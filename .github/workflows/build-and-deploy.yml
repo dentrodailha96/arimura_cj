@@ -22,6 +22,8 @@ env:
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.short-sha.outputs.sha }}
     steps:
       - name: Checkout the repo 
         uses: actions/checkout@v2
@@ -29,14 +31,14 @@ jobs:
       - uses: benjlevesque/short-sha@v3.0
         id: short-sha
         with:
-          lenght: 6
+          length: 6
         
       - run: echo $SHA
         env:
           SHA: ${{ steps.short-sha.outputs.sha }}
 
       - name: Build container image
-        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}  ./code
+        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./code
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -52,7 +54,7 @@ jobs:
             echo "Tag doesn't exist yet"
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}
+        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
         
   deploy:
     runs-on: ubuntu-latest
@@ -66,16 +68,19 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          envs: IMAGE_NAME,REGISTRY,{{ secrets.DIGITALOCEAN_ACCESS_TOKEN }},GITHUB_SHA
+          port: 22
           script: |
             # Login to registry
             docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
             # Stop running container
-            docker stop ${{ vars.IMAGE_NAME}}
+            docker stop ${{ vars.IMAGE_NAME }} || true
             # Remove old container
-            docker rm ${{ vars.IMAGE_NAME}}
+            docker rm ${{ vars.IMAGE_NAME}} || true
+            # Pull the new image
+            docker pull ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ needs.build_and_push.outputs.sha }}
             # Run a new container from a new image
             docker run -d \
             --restart always \
             --name ${{ vars.IMAGE_NAME}} \
-            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ env.SHA }}
+            -p 8080:80 \
+            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ needs.build_and_push.outputs.sha }}
