@@ -68,4 +68,18 @@ jobs:
           username: ${{ secrets.USERNAME}}
           key: ${{ secrets.SSHKEY}}
           port: 22
-          
+          script: |
+            # Login to registry
+            docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
+            # Stop running container
+            docker stop ${{ vars.IMAGE_NAME }} || true
+            # Remove old container
+            docker rm ${{ vars.IMAGE_NAME}} || true
+            # Pull the new image
+            docker pull ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ needs.build_and_push.outputs.sha }}
+            # Run a new container from a new image
+            docker run -d \
+            --restart always \
+            --name ${{ vars.IMAGE_NAME}} \
+            -p 8080:80 \
+            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ needs.build_and_push.outputs.sha }}
