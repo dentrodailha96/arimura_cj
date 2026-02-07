@@ -1,10 +1,23 @@
-- name: Ensure no SSH keys loaded
-  run: |
-    ssh-add -D || true
+name: docker-ssh-failure-test
 
-- name: Attempt SSH
-  run: |
-    ssh \
-      -o StrictHostKeyChecking=no \
-      user@your-host.example.com
+on: [push]
 
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t ssh-test .
+
+      - name: Run container (expect SSH failure)
+        run: |
+          set +e
+          docker run --rm ssh-test \
+            ssh -vvv \
+              -o StrictHostKeyChecking=no \
+              -o PasswordAuthentication=no \
+              root@${{ secrets.HOST }}
+          echo "exit code: $?"
