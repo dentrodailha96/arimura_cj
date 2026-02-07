@@ -1,14 +1,10 @@
-name: SSH auth failure test
+- name: Ensure no SSH keys loaded
+  run: |
+    ssh-add -D || true
 
-on: [push]
+- name: Attempt SSH
+  run: |
+    ssh \
+      -o StrictHostKeyChecking=no \
+      user@your-host.example.com
 
-jobs:
-  ssh-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Attempt SSH without a key
-        run: |
-          ssh \
-            -o StrictHostKeyChecking=no \
-            -o PasswordAuthentication=no \
-            user@your-host.example.com
