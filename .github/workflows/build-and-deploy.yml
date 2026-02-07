@@ -61,8 +61,19 @@ jobs:
     needs: build_and_push
     
     steps:
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          port: 22
+          script: |
+              whoami
+              hostname
+
       - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.HOST}}
           username: ${{ secrets.USERNAME}}
