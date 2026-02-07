@@ -8,10 +8,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+        with:
+          length: 6
+        
+      - run: echo $SHA
+        env:
+          SHA: ${{ steps.short-sha.outputs.sha }}
 
-      - name: Build image
-        run: docker build -t ssh-test .
-
+      - name: Build container image
+        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./code
+      
       - name: Run container (expect SSH failure)
         run: |
           set +e
