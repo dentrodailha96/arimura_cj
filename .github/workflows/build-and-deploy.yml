@@ -20,12 +20,33 @@ jobs:
       - name: Build container image
         run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./code
       
-      - name: Run container (expect SSH failure)
+      - name: Run container (force SSH failure)
         run: |
           set +e
-          docker run --rm ssh-test \
-            ssh -vvv \
-              -o StrictHostKeyChecking=no \
-              -o PasswordAuthentication=no \
-              root@${{ secrets.HOST }}
+      
+          docker run --rm \
+            ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }} \
+            sh -c '
+              echo "definitely-not-a-key" > /tmp/bad_key
+              chmod 600 /tmp/bad_key
+      
+              ssh -vvv \
+                -i /tmp/bad_key \
+                -o IdentitiesOnly=yes \
+                -o PreferredAuthentications=publickey \
+                -o PasswordAuthentication=no \
+                -o StrictHostKeyChecking=no \
+                root@${{ secrets.HOST }}
+            '
+      
           echo "exit code: $?"
+          
+          - name: Inspect container SSH state
+            run: |
+                  docker run --rm \
+                    ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }} \
+                    sh -c '
+                      ls -la /root/.ssh || echo "no ~/.ssh"
+                      ssh-add -l || echo "no agent"
+                    '
+
