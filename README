@@ -1,2 +1,9 @@
-### ARIMURA Culinária Japonesa Github 
-- This is the Git for this project 
+## Sushi Project Delivery app 
+(on going project)
+
+- Author: Nakashima, Hiromi and Nakashima, Caio. 
+
+- App created to optimize order from a delivery business. The goal is making a automatic way to write the orders in a database, relating with a fixed or strictic client table and flexible product table. 
+The app destined to internal use from the business.
+
+
