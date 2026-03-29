@@ -48,18 +48,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600
       
-      # given the limited plan, is better to always clean everything
       - name: Remove all old images
         run: |
           doctl registry repository list-tags ${{ vars.IMAGE_NAME }} \
             --no-header --format Tag \
             | grep -v ${{ steps.short-sha.outputs.sha }} \
             | xargs -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
-
       - name: Push image to DigitalOcean Container Registry
         run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
 
-      # delete leftovers from the cleaned CR
       - name: Garbage collect registry
         run: doctl registry garbage-collection start --include-untagged-manifests --force
 
@@ -78,7 +75,6 @@ jobs:
           script: |
               whoami
               hostname
-
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@v0.1.6
         with:
