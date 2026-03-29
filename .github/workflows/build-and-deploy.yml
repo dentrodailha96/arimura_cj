@@ -50,11 +50,16 @@ jobs:
       
       - name: Remove all old images
         run: |
-            doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} ${{ steps.short-sha.outputs.sha }} --force ||
-            echo "Tag doesn't exist yet"
+          doctl registry repository list-tags ${{ vars.IMAGE_NAME }} \
+            --no-header --format Tag \
+            | grep -v ${{ steps.short-sha.outputs.sha }} \
+            | xargs -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
 
       - name: Push image to DigitalOcean Container Registry
         run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
+
+      - name: Garbage collect registry
+        run: doctl registry garbage-collection start --include-untagged-manifests --force
 
   deploy:
     runs-on: ubuntu-latest
