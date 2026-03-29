@@ -46,7 +46,10 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
     
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
+        run: doctl registry login --expiry-seconds 1800
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
       
       - name: Remove all old images
         run: |
@@ -54,10 +57,7 @@ jobs:
             --no-header --format Tag \
             | grep -v ${{ steps.short-sha.outputs.sha }} \
             | xargs -r -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
-
-      - name: Push image to DigitalOcean Container Registry
-        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
-
+            
       - name: Garbage collect registry
         run: doctl registry garbage-collection start --include-untagged-manifests --force
 
