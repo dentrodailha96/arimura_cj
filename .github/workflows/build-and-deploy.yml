@@ -63,7 +63,7 @@ jobs:
           
           echo "Waiting for garbage collection to complete..."
           while true; do
-            GC_JSON=$(doctl registry garbage-collection get-active --output json 2>/dev/null)
+            GC_JSON=$(doctl registry garbage-collection get-active --output json 2>/dev/null || echo "[]")
             STATUS=$(echo "$GC_JSON" | jq -r 'if length == 0 then "none" else .[0].status end')
             echo "GC status: $STATUS"
             if [ "$STATUS" = "none" ] || [ "$STATUS" = "succeeded" ] || [ "$STATUS" = "failed" ]; then
