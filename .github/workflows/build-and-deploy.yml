@@ -53,7 +53,8 @@ jobs:
           doctl registry repository list-tags ${{ vars.IMAGE_NAME }} \
             --no-header --format Tag \
             | grep -v ${{ steps.short-sha.outputs.sha }} \
-            | xargs -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
+            | xargs -r -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
+
       - name: Push image to DigitalOcean Container Registry
         run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
 
