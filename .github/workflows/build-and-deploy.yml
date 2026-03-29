@@ -59,6 +59,16 @@ jobs:
             
       - name: Garbage collect registry
         run: doctl registry garbage-collection start --include-untagged-manifests --force
+             echo "Waiting for garbage collection to complete..."
+             while true; do
+               STATUS=$(doctl registry garbage-collection get-active --output json 2>/dev/null | jq -r '.[0].status // "none"')
+               echo "GC status: $STATUS"
+               if [ "$STATUS" = "none" ] || [ "$STATUS" = "succeeded" ] || [ "$STATUS" = "failed" ]; then
+                 echo "GC finished with status: $STATUS"
+                 break
+               fi
+               sleep 5
+             done
 
   deploy:
     runs-on: ubuntu-latest
