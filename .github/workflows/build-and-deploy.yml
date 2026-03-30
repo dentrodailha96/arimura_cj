@@ -1,4 +1,4 @@
-name: CI
+name: CICD
 
 # 1
 # Controls when the workflow will run
@@ -45,16 +45,33 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
     
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
-      
+      - name: Log in and push to DigitalOcean Container Registry
+        run: |
+          echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} --password-stdin
+          docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
+
       - name: Remove all old images
         run: |
-            doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} ${{ steps.short-sha.outputs.sha }} --force ||
-            echo "Tag doesn't exist yet"
-
-      - name: Push image to DigitalOcean Container Registry
-        run: docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
+          doctl registry repository list-tags ${{ vars.IMAGE_NAME }} \
+            --no-header --format Tag \
+            | grep -v ${{ steps.short-sha.outputs.sha }} \
+            | xargs -r -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
+            
+      - name: Garbage collect registry
+        run: |
+          doctl registry garbage-collection start --include-untagged-manifests --force
+          
+          echo "Waiting for garbage collection to complete..."
+          while true; do
+            GC_JSON=$(doctl registry garbage-collection get-active --output json 2>/dev/null || echo "[]")
+            STATUS=$(echo "$GC_JSON" | jq -r 'if length == 0 then "none" else .[0].status end')
+            echo "GC status: $STATUS"
+            if [ "$STATUS" = "none" ] || [ "$STATUS" = "succeeded" ] || [ "$STATUS" = "failed" ]; then
+              echo "GC finished with status: $STATUS"
+              break
+            fi
+            sleep 5
+          done
 
   deploy:
     runs-on: ubuntu-latest
@@ -71,7 +88,6 @@ jobs:
           script: |
               whoami
               hostname
-
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@v0.1.6
         with:
