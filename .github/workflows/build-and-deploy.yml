@@ -5,7 +5,7 @@ name: CICD
 on:
   # Triggers the workflow on push events but only for the master branch
   push:
-    branches: [ main ]
+    branches: [ main, DO ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -111,3 +111,20 @@ jobs:
             --name ${{ vars.IMAGE_NAME}} \
             -p 8080:80 \
             ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ needs.build_and_push.outputs.sha }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.AUTOMERGE }}
+
+      - name: Merge branch into main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout main
+          git merge origin/${{ github.ref_name }} --no-ff -m "Auto-merge ${{ github.ref_name }} into main [skip ci]"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTOMERGE }}
