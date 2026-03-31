@@ -113,14 +113,14 @@ jobs:
             ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ needs.build_and_push.outputs.sha }}
 
       - name: Checkout
-        if: github.ref_name == 'DO'
+        if: github.ref_name != 'main'
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.AUTOMERGE }}
 
       - name: Merge branch into main
-        if: github.ref_name == 'DO'
+        if: github.ref_name != 'main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
