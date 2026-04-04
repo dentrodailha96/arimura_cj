@@ -76,6 +76,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
+      contents: write
     
     steps:
       - name: Test SSH connection
