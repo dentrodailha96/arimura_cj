@@ -75,6 +75,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: build_and_push
     
     steps:
