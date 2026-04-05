@@ -1,0 +1,7 @@
+<form action="update_product.php" method="POST">
+    <input type="hidden" name="p_id" value="1">
+    Name: <input type="text" name="p_nome" value="Product Name"><br>
+    Price: <input type="text" name="p_price_product" value="10.50"><br>
+    Sales Unit: <input type="text" name="p_sales_unit" value="unit"><br>
+    <input type="submit" value="Update Product">
+</form>
