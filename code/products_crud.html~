@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Manager</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f4f4f2;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      color: #1a1a1a;
+    }
+
+    .wrap { width: 100%; max-width: 480px; }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      color: #1a1a1a;
+    }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+
+    .tab-btn {
+      flex: 1; padding: 10px 8px; font-size: 13px; font-weight: 500;
+      border: 0.5px solid #ccc;
+      background: #fff;
+      color: #666;
+      border-radius: 8px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .tab-btn:hover { background: #f0f0ee; color: #1a1a1a; }
+    .tab-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card {
+      background: #fff;
+      border: 0.5px solid #ddd;
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: relative;
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field label {
+      display: block; font-size: 12px; color: #888;
+      margin-bottom: 6px; letter-spacing: 0.04em;
+    }
+    .field input {
+      width: 100%; padding: 9px 12px; font-size: 14px;
+      border: 0.5px solid #ccc;
+      border-radius: 8px;
+      background: #f7f7f5;
+      color: #1a1a1a;
+      outline: none; transition: border 0.15s;
+    }
+    .field input:focus {
+      border-color: #999;
+      background: #fff;
+    }
+
+    .action-btn {
+      width: 100%; padding: 11px; font-size: 14px; font-weight: 500;
+      border-radius: 8px; cursor: pointer;
+      border: none; margin-top: 4px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .action-btn:active { transform: scale(0.98); }
+    .action-btn:hover { opacity: 0.88; }
+
+    .btn-new    { background: #1a1a1a; color: #fff; }
+    .btn-update { background: #185FA5; color: #fff; }
+    .btn-delete { background: #A32D2D; color: #fff; }
+
+    .confirm-overlay {
+      display: none;
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.4);
+      border-radius: 12px;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 14px; padding: 1.5rem;
+      text-align: center;
+    }
+    .confirm-overlay.show { display: flex; }
+    .confirm-text { color: #fff; font-size: 14px; line-height: 1.5; }
+    .confirm-actions { display: flex; gap: 8px; width: 100%; }
+    .confirm-actions button {
+      flex: 1; padding: 9px; border: none;
+      border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
+    }
+    .confirm-yes { background: #A32D2D; color: #fff; }
+    .confirm-no  { background: rgba(255,255,255,0.92); color: #111; }
+
+    .success-msg {
+      display: none; align-items: center; gap: 8px;
+      background: #EAF3DE; color: #3B6D11;
+      border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; margin-top: 10px;
+    }
+    .success-msg.show { display: flex; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Product manager</h1>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('new', this)">+ New product</button>
+      <button class="tab-btn" onclick="switchTab('update', this)">Edit product</button>
+      <button class="tab-btn" onclick="switchTab('delete', this)">Delete product</button>
+    </div>
+
+    <!-- NEW -->
+    <div id="panel-new" class="panel active">
+      <div class="card">
+        <form action="products_insert.php" method="POST" onsubmit="handleSubmit(event,'new')">
+          <div class="field">
+            <label>Nome</label>
+            <input type="text" name="p_nome" placeholder="e.g. Sushi 24" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Preço</label>
+            <input type="number" name="p_price_product" placeholder="R$ 0,00" step="0.01" min="0" required autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Unidade de venda</label>
+            <input type="text" name="p_sales_unit" placeholder="e.g. unidades, gramas" autocomplete="off">
+          </div>
+          <button type="submit" class="action-btn btn-new">Add product</button>
+        </form>
+        <div class="success-msg" id="msg-new">Product added successfully.</div>
+      </div>
+    </div>
+    
+    <!-- UPDATE -->
+    <div id="panel-update" class="panel">
+      <div class="card">
+        <form action="products_update.php" method="POST" onsubmit="handleSubmit(event,'update')">
+          <div class="field">
+            <label>Product ID</label>
+            <input type="number" name="p_id_product" placeholder="Enter product ID" required autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Name</label>
+            <input type="text" name="p_nome" placeholder="New name" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Price</label>
+            <input type="number" name="p_price_product" placeholder="0.00" step="0.01" min="0" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Sales unit</label>
+            <input type="text" name="p_sales_unit" placeholder="e.g. unit, kg, litre" autocomplete="off">
+          </div>
+          <button type="submit" class="action-btn btn-update">Update product</button>
+        </form>
+        <div class="success-msg" id="msg-update">Product updated successfully.</div>
+      </div>
+    </div>
+    
+    <!-- DELETE -->
+    <div id="panel-delete" class="panel">
+      <div class="card" style="position: relative;">
+        <form action="products_delete.php" method="POST" onsubmit="handleDelete(event)">
+          <div class="field">
+            <label>Product ID</label>
+            <input type="number" name="p_id_product" placeholder="Enter product ID to delete" required autocomplete="off">
+          </div>
+          <button type="submit" class="action-btn btn-delete">Delete product</button>
+        </form>
+        <div class="confirm-overlay" id="confirm-box">
+          <p class="confirm-text">Are you sure you want to delete this product?<br>This cannot be undone.</p>
+          <div class="confirm-actions">
+            <button class="confirm-no" onclick="cancelDelete()">Cancel</button>
+            <button class="confirm-yes" onclick="confirmDelete()">Yes, delete</button>
+          </div>
+        </div>
+        <div class="success-msg" id="msg-delete">Product deleted successfully.</div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let pendingDeleteForm = null;
+
+    function switchTab(name, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel -' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+    
+    function handleSubmit(e, key) {
+      const form = e.target;
+      const msg = document.getElementById('msg-' + key);
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 3000);
+    }
+    
+    function handleDelete(e) {
+      e.preventDefault();
+      pendingDeleteForm = e.target;
+      document.getElementById('confirm-box').classList.add('show');
+    }
+    
+    function confirmDelete() {
+	   document.getElementById('confirm-box').classList.remove('show');
+	   const formToSubmit = pendingDeleteForm;
+	   pendingDeleteForm = null;
+	   if (formToSubmit) formToSubmit.submit();
+	 }
+	 
+    function cancelDelete() {
+      document.getElementById('confirm-box').classList.remove('show');
+      pendingDeleteForm = null;
+    }
+
+  </script>
+</body>
+</html>
