@@ -1,4 +1,0 @@
-<form action="delete_product.php" method="POST">
-    <input type="int" name="p_id_product" value="ID_Product"><br>
-    <input type="submit" value="Delete Product" onclick="return confirm('Are you sure?')">
-</form>
