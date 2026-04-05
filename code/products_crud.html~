@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle de Produto</title>
+  <title>Product Manager</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -115,9 +115,9 @@
     <h1>Product manager</h1>
 
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('new', this)">+ Novo Produto</button>
-      <button class="tab-btn" onclick="switchTab('update', this)">Editar Produto</button>
-      <button class="tab-btn" onclick="switchTab('delete', this)">Excluir Produto</button>
+      <button class="tab-btn active" onclick="switchTab('new', this)">+ New product</button>
+      <button class="tab-btn" onclick="switchTab('update', this)">Edit product</button>
+      <button class="tab-btn" onclick="switchTab('delete', this)">Delete product</button>
     </div>
 
     <!-- NEW -->
