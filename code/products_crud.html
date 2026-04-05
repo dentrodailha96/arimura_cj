@@ -123,29 +123,29 @@
     <!-- NEW -->
     <div id="panel-new" class="panel active">
       <div class="card">
-        <form action="insert_product.php" method="POST" onsubmit="handleSubmit(event,'new')">
+        <form action="products_insert.php" method="POST" onsubmit="handleSubmit(event,'new')">
           <div class="field">
-            <label>Name</label>
-            <input type="text" name="p_nome" placeholder="e.g. Margherita Pizza" autocomplete="off">
+            <label>Nome</label>
+            <input type="text" name="p_nome" placeholder="e.g. Sushi 24" autocomplete="off">
           </div>
           <div class="field">
-            <label>Price</label>
-            <input type="number" name="p_price_product" placeholder="0.00" step="0.01" min="0" required autocomplete="off">
+            <label>Preço</label>
+            <input type="number" name="p_price_product" placeholder="R$ 0,00" step="0.01" min="0" required autocomplete="off">
           </div>
           <div class="field">
-            <label>Sales unit</label>
-            <input type="text" name="p_sales_unit" placeholder="e.g. unit, kg, litre" autocomplete="off">
+            <label>Unidade de venda</label>
+            <input type="text" name="p_sales_unit" placeholder="e.g. unidades, gramas" autocomplete="off">
           </div>
           <button type="submit" class="action-btn btn-new">Add product</button>
         </form>
         <div class="success-msg" id="msg-new">Product added successfully.</div>
       </div>
     </div>
-
+    
     <!-- UPDATE -->
     <div id="panel-update" class="panel">
       <div class="card">
-        <form action="update_product.php" method="POST" onsubmit="handleSubmit(event,'update')">
+        <form action="products_update.php" method="POST" onsubmit="handleSubmit(event,'update')">
           <div class="field">
             <label>Product ID</label>
             <input type="number" name="p_id_product" placeholder="Enter product ID" required autocomplete="off">
@@ -167,11 +167,11 @@
         <div class="success-msg" id="msg-update">Product updated successfully.</div>
       </div>
     </div>
-
+    
     <!-- DELETE -->
     <div id="panel-delete" class="panel">
       <div class="card" style="position: relative;">
-        <form action="delete_product.php" method="POST" onsubmit="handleDelete(event)">
+        <form action="products_delete.php" method="POST" onsubmit="handleDelete(event)">
           <div class="field">
             <label>Product ID</label>
             <input type="number" name="p_id_product" placeholder="Enter product ID to delete" required autocomplete="off">
@@ -188,9 +188,8 @@
         <div class="success-msg" id="msg-delete">Product deleted successfully.</div>
       </div>
     </div>
-
   </div>
-
+  
   <script>
     let pendingDeleteForm = null;
 
@@ -200,38 +199,32 @@
       document.getElementById('panel-' + name).classList.add('active');
       btn.classList.add('active');
     }
-
+    
     function handleSubmit(e, key) {
-      e.preventDefault();
       const form = e.target;
       const msg = document.getElementById('msg-' + key);
-      // In production, remove preventDefault() and let the form submit normally.
-      // The reset + message below is just UI feedback for testing.
-      form.reset();
       msg.classList.add('show');
       setTimeout(() => msg.classList.remove('show'), 3000);
     }
-
+    
     function handleDelete(e) {
       e.preventDefault();
       pendingDeleteForm = e.target;
       document.getElementById('confirm-box').classList.add('show');
     }
-
+    
     function confirmDelete() {
-      document.getElementById('confirm-box').classList.remove('show');
-      const msg = document.getElementById('msg-delete');
-      if (pendingDeleteForm) pendingDeleteForm.reset();
-      pendingDeleteForm = null;
-      msg.classList.add('show');
-      // In production: pendingDeleteForm.submit();
-      setTimeout(() => msg.classList.remove('show'), 3000);
-    }
-
+	   document.getElementById('confirm-box').classList.remove('show');
+	   const formToSubmit = pendingDeleteForm;
+	   pendingDeleteForm = null;
+	   if (formToSubmit) formToSubmit.submit();
+	 }
+	 
     function cancelDelete() {
       document.getElementById('confirm-box').classList.remove('show');
       pendingDeleteForm = null;
     }
+
   </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
     $id = $_REQUEST['p_id_product'];
     
     // SQL DELETE query
-    $textsql = "DELETE FROM products WHERE id = $id";
+    $textsql = "DELETE FROM arimura_cj.products WHERE id_product = $id";
     
     // Debugging: print the query
     echo "Executing: " . $textsql . "<br>";
