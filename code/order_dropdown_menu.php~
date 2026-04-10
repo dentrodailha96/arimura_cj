@@ -1,0 +1,21 @@
+<?php
+	include("db_connection.php");
+	
+	// Fetch clients for the dropdown
+	$clients_result = pg_query($con, "SELECT name FROM arimura_cj.client ORDER BY name");
+	$clients = [];
+	while ($row = pg_fetch_assoc($clients_result)) {
+	    $clients[] = $row;
+	}
+	
+	echo "Total clients found: " . count($clients); ?>	
+	
+	// Fetch products for the dropdown
+	$products_result = pg_query($con, "SELECT id_product, name, price FROM arimura_cj.products ORDER BY name");
+	$products = [];
+	while ($row = pg_fetch_assoc($products_result)) {
+	    $products[] = $row;
+	}
+	
+	pg_close($con);
+?>

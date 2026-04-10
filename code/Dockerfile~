@@ -1,5 +1,5 @@
 #Use PHP with Apache Webserver (official image below)
-FROM python:3.12-slim
+FROM php:8.3-apache 
 
 # Set ServerName to suppress Apache warnings
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

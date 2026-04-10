@@ -1,0 +1,12 @@
+<?php
+  error_reporting(E_ALL);
+  ini_set('display_errors', 1);
+  echo "<h1>The PHP engine is running!</h1>";
+  
+  include("db_connection.php");
+  if (isset($con)) {
+      echo "Database connection variable found.";
+  } else {
+      echo "Database connection variable NOT found.";
+  }
+?>
