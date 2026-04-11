@@ -12,7 +12,7 @@ get_connection()
 
 
 # ── Serve the HTML page ──────────────────────────────────────────────────────
-@app.route("/")
+@app.route("/clients")
 def index():
     # Flask will look for 'clients_crud.html' inside the /templates folder
     return render_template("clients_crud_flask.html")
