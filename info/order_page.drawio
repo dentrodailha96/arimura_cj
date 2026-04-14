@@ -1,0 +1,97 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram name="Page-1" id="zNGz2oRm0k265S9RFD7q">
+    <mxGraphModel dx="1360" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #d7d7d7);strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="560" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-8" value="New Order&lt;div&gt;Forms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="100" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-51" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #e4e4e4);fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="320" y="50" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-54" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="150" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-56" value="New order form:&lt;br&gt;&lt;br&gt;Client: Dropdown menu with the client name from the client table&lt;div&gt;Pick up or delivery? check box&lt;/div&gt;&lt;div&gt;Day to delivery&lt;/div&gt;&lt;div&gt;Time to delivery&amp;nbsp;&lt;/div&gt;&lt;div&gt;Address to delivery (from the forms or a new one)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Order items:&lt;/div&gt;&lt;div&gt;(Plus button to add the items from the product table) needs an extra column that add the observation if the product needs some adaptation or not.&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Total price of the order&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="230" y="100" width="430" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-57" value="New Order" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="500" y="310" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-58" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #d7d7d7);strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="120" y="425" width="560" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-59" value="New Order&lt;div&gt;Forms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="445" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-60" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #e4e4e4);fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="320" y="395" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-61" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="495" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-62" value="Orders:&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Page to show the table from orders&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;id_order, id_cleint, status, price, order_date, delivery, delivery_date, delivery_time, delivery_address, created_at&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="230" y="445" width="430" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-65" value="Order Detailed" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="545" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-66" value="Date range to get the orders of this range period defined" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="510" y="455" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-67" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #d7d7d7);strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="120" y="770" width="560" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-68" value="New Order&lt;div&gt;Forms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="790" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-69" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #e4e4e4);fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="320" y="740" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-70" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="840" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-71" value="Order_Products:&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Page that show the table from Order_Products.&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;id, id_order, id_product, quantity, unit_price, observation, created_at&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="230" y="790" width="430" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-72" value="Production" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="940" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-74" value="Order detailed" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="890" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-75" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #d7d7d7);strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="145" y="1120" width="560" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-76" value="New Order&lt;div&gt;Forms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="155" y="1140" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-77" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#ffffff, #e4e4e4);fontColor=light-dark(#000000,#EDEDED);" vertex="1" parent="1">
+          <mxGeometry x="345" y="1090" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-78" value="Orders" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="155" y="1190" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-79" value="I need to get the information from a time range, that are the total amount of product that I need to cook in an specific time range and it&#39;s specification. Which means, I need to get the informatiom queried from my table order and order_products together in a defined time range.&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="255" y="1140" width="430" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-80" value="Production" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="155" y="1290" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-81" value="Date range to get the orders of this range period defined" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="535" y="1150" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-82" value="Production" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="155" y="1240" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i_HpKZ-jQ7dQtPd6xInZ-83" value="Drop down menu to get the id_order" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="510" y="800" width="140" height="55" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
