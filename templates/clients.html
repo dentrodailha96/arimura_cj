@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Clients{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .nav-btn { width: 100%; margin-bottom: 8px; text-align: left; }
+    .nav-btn.active { background-color: #0d6efd; color: #fff; border-color: #0d6efd; }
+    .section { display: none; }
+    .section.active { display: block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <h4 class="mb-3">Client</h4>
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-0">
+
+                <!-- Left: navigation -->
+                <div class="col-2 border-end pe-3">
+                    <button class="btn btn-outline-primary nav-btn active" onclick="showSection('add', this)">Add new customer</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('edit', this)">Edit Customer</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('delete', this)">Delete Customer</button>
+                </div>
+
+                <!-- Center: forms -->
+                <div class="col-4 border-end px-4">
+
+                    <!-- Add -->
+                    <div id="section-add" class="section active">
+                        <h6 class="mb-3">Add new customer form</h6>
+                        <form id="form-add">
+                            <div class="mb-2">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" name="p_nome" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Telephone</label>
+                                <input type="text" class="form-control" name="p_telephone" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="p_address">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="p_email">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add new customer</button>
+                        </form>
+                    </div>
+
+                    <!-- Edit -->
+                    <div id="section-edit" class="section">
+                        <h6 class="mb-3">Edit Customer</h6>
+                        <div class="mb-3">
+                            <label class="form-label">Id_Customer</label>
+                            <select class="form-select" id="edit-select" onchange="loadClient('edit', this.value)">
+                                <option value="">-- select --</option>
+                                {% for c in clients %}
+                                <option value="{{ c.id_client }}">{{ c.id_client }} – {{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <form id="form-edit">
+                            <input type="hidden" name="p_id_client" id="edit-id">
+                            <div class="mb-2">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" name="p_nome" id="edit-name">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Telephone</label>
+                                <input type="text" class="form-control" name="p_telephone" id="edit-telephone">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="p_address" id="edit-address">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="p_email" id="edit-email">
+                            </div>
+                            <button type="submit" class="btn btn-warning">Edit Customer</button>
+                        </form>
+                    </div>
+
+                    <!-- Delete -->
+                    <div id="section-delete" class="section">
+                        <h6 class="mb-3">Delete Customer</h6>
+                        <div class="mb-3">
+                            <label class="form-label">Id Customer</label>
+                            <select class="form-select" id="delete-select" onchange="loadClient('delete', this.value)">
+                                <option value="">-- select --</option>
+                                {% for c in clients %}
+                                <option value="{{ c.id_client }}">{{ c.id_client }} – {{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <form id="form-delete">
+                            <input type="hidden" name="p_id_client" id="delete-id">
+                            <div class="mb-2">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="delete-name" disabled>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Telephone</label>
+                                <input type="text" class="form-control" id="delete-telephone" disabled>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="delete-address" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" id="delete-email" disabled>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Delete Customer</button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- Right: table -->
+                <div class="col-6 ps-4">
+                    <h6 class="mb-3">Customer table</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Telephone</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Last Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in clients %}
+                                <tr>
+                                    <td>{{ c.id_client }}</td>
+                                    <td>{{ c.name }}</td>
+                                    <td>{{ c.telephone }}</td>
+                                    <td>{{ c.address or '' }}</td>
+                                    <td>{{ c.email or '' }}</td>
+                                    <td>{{ c.last_modified or '' }}</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="6" class="text-center text-muted">No customers yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showSection(name, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    btn.classList.add('active');
+}
+
+function loadClient(mode, id) {
+    if (!id) return;
+    fetch('/clients/get/' + id)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById(mode + '-id').value        = data.id_client;
+            document.getElementById(mode + '-name').value      = data.name;
+            document.getElementById(mode + '-telephone').value = data.telephone;
+            document.getElementById(mode + '-address').value   = data.address;
+            document.getElementById(mode + '-email').value     = data.email;
+        });
+}
+
+function postForm(formId, url) {
+    const fd = new FormData(document.getElementById(formId));
+    fetch(url, { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) location.reload();
+            else alert('Error: ' + JSON.stringify(data));
+        });
+}
+
+document.getElementById('form-add').addEventListener('submit', function(e) {
+    e.preventDefault();
+    postForm('form-add', '/clients/insert');
+});
+
+document.getElementById('form-edit').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('edit-id').value) {
+        alert('Select a customer first.');
+        return;
+    }
+    postForm('form-edit', '/clients/update');
+});
+
+document.getElementById('form-delete').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('delete-id').value) {
+        alert('Select a customer first.');
+        return;
+    }
+    if (confirm('Delete this customer? This action cannot be undone.')) {
+        postForm('form-delete', '/clients/delete');
+    }
+});
+</script>
+{% endblock %}

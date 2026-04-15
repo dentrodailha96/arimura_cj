@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block title %}Orders{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .nav-btn { width: 100%; margin-bottom: 8px; text-align: left; }
+    .nav-btn.active-nav { background-color: #0d6efd; color: #fff; border-color: #0d6efd; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <h4 class="mb-3">Orders</h4>
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-0">
+
+                <!-- Left: navigation -->
+                <div class="col-2 border-end pe-3">
+                    <a href="/orders/new"        class="btn btn-outline-primary nav-btn {% if active == 'new' %}active-nav{% endif %}">New Order Forms</a>
+                    <a href="/orders/list"       class="btn btn-outline-primary nav-btn {% if active == 'list' %}active-nav{% endif %}">Orders</a>
+                    <a href="/orders/detailed"   class="btn btn-outline-primary nav-btn {% if active == 'detailed' %}active-nav{% endif %}">Order Detailed</a>
+                    <a href="/orders/production" class="btn btn-outline-primary nav-btn {% if active == 'production' %}active-nav{% endif %}">Production</a>
+                </div>
+
+                <!-- Right: content area -->
+                <div class="col-10 ps-4">
+
+                    {# ── NEW ORDER ──────────────────────────────────────────── #}
+                    {% if active == 'new' %}
+                    <h6 class="mb-3">New order form</h6>
+                    <form id="form-new-order">
+
+                        <div class="row mb-3">
+                            <div class="col-5">
+                                <label class="form-label">Client</label>
+                                <select class="form-select" id="p_id_client" required>
+                                    <option value="">-- select client --</option>
+                                    {% for c in clients %}
+                                    <option value="{{ c.id_client }}">{{ c.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3 d-flex align-items-end pb-1">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="p_delivery" onchange="toggleDelivery()">
+                                    <label class="form-check-label fw-semibold" for="p_delivery">Delivery</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" id="p_delivery_date" required>
+                            </div>
+                            <div class="col-3">
+                                <label class="form-label">Time</label>
+                                <input type="time" class="form-control" id="p_delivery_time" required>
+                            </div>
+                            <div class="col-5" id="address-field" style="display:none">
+                                <label class="form-label">Delivery Address</label>
+                                <input type="text" class="form-control" id="p_delivery_address">
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Order Items</h6>
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="addItemRow()">+ Add Item</button>
+                        </div>
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm table-bordered align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width:30%">Product</th>
+                                        <th style="width:12%">Quantity</th>
+                                        <th style="width:14%">Unit Price</th>
+                                        <th>Observation</th>
+                                        <th style="width:5%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items-body"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label class="form-label fw-semibold">Total Price</label>
+                                <input type="text" class="form-control fw-bold" id="total-price" readonly value="0.00">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">New Order</button>
+                    </form>
+
+                    {# ── ORDERS LIST ─────────────────────────────────────────── #}
+                    {% elif active == 'list' %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Orders</h6>
+                        <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/list">
+                            <input type="date" class="form-control form-control-sm" name="from_date" value="{{ from_date }}">
+                            <span class="text-muted">to</span>
+                            <input type="date" class="form-control form-control-sm" name="to_date" value="{{ to_date }}">
+                            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                            {% if from_date or to_date %}
+                            <a href="/orders/list" class="btn btn-sm btn-outline-secondary">Clear</a>
+                            {% endif %}
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Client ID</th>
+                                    <th>Status</th>
+                                    <th>Price</th>
+                                    <th>Delivery</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Address</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in orders %}
+                                <tr>
+                                    <td>{{ o.id_order }}</td>
+                                    <td>{{ o.id_client }}</td>
+                                    <td>
+                                        <span class="badge
+                                            {% if o.status == 'pending' %}bg-warning text-dark
+                                            {% elif o.status == 'done' %}bg-success
+                                            {% else %}bg-secondary{% endif %}">
+                                            {{ o.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ "%.2f"|format(o.price) }}</td>
+                                    <td>{{ 'Yes' if o.delivery else 'No' }}</td>
+                                    <td>{{ o.delivery_date }}</td>
+                                    <td>{{ o.delivery_time }}</td>
+                                    <td>{{ o.delivery_address or '' }}</td>
+                                    <td>{{ o.created_at }}</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="9" class="text-center text-muted">No orders found.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {# ── ORDER DETAILED ──────────────────────────────────────── #}
+                    {% elif active == 'detailed' %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Order Detailed</h6>
+                        <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/detailed">
+                            <label class="form-label mb-0">Order ID</label>
+                            <select class="form-select form-select-sm" name="id_order" onchange="this.form.submit()" style="width:auto">
+                                <option value="">-- select order --</option>
+                                {% for oid in order_ids %}
+                                <option value="{{ oid }}" {% if oid == selected_order %}selected{% endif %}>{{ oid }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Order</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Observation</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.id_order }}</td>
+                                    <td>{{ item.product_name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ "%.2f"|format(item.unit_price) if item.unit_price else '' }}</td>
+                                    <td>{{ item.observation or '' }}</td>
+                                    <td>{{ item.created_at }}</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="7" class="text-center text-muted">
+                                    {% if selected_order %}No items for this order.{% else %}Select an order to see its items.{% endif %}
+                                </td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {# ── PRODUCTION ──────────────────────────────────────────── #}
+                    {% elif active == 'production' %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Production</h6>
+                        <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/production">
+                            <input type="date" class="form-control form-control-sm" name="from_date" value="{{ from_date }}">
+                            <span class="text-muted">to</span>
+                            <input type="date" class="form-control form-control-sm" name="to_date" value="{{ to_date }}">
+                            <button type="submit" class="btn btn-sm btn-primary">Get Production</button>
+                            {% if from_date or to_date %}
+                            <a href="/orders/production" class="btn btn-sm btn-outline-secondary">Clear</a>
+                            {% endif %}
+                        </form>
+                    </div>
+
+                    {% if with_obs or without_obs %}
+
+                    {% if with_obs %}
+                    <h6 class="mb-2 text-danger">With Observations</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
+                                    <th>Observation</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in with_obs %}
+                                <tr id="row-{{ item.id }}" class="{{ 'table-success' if item.status == 'done' else ('table-danger' if item.status == 'cancelled' else '') }}">
+                                    <td>{{ item.id_order }}</td>
+                                    <td>{{ item.product_name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.sales_unit or '' }}</td>
+                                    <td>{{ item.observation }}</td>
+                                    <td>{{ item.delivery_date }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button class="btn {{ 'btn-warning' if item.status == 'pending' else 'btn-outline-warning' }}"
+                                                    onclick="setStatus({{ item.id }}, 'pending')">Pending</button>
+                                            <button class="btn {{ 'btn-success' if item.status == 'done' else 'btn-outline-success' }}"
+                                                    onclick="setStatus({{ item.id }}, 'done')">Done</button>
+                                            <button class="btn {{ 'btn-danger' if item.status == 'cancelled' else 'btn-outline-danger' }}"
+                                                    onclick="setStatus({{ item.id }}, 'cancelled')">Cancelled</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    {% if without_obs %}
+                    <h6 class="mb-2">Without Observations</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in without_obs %}
+                                <tr id="row-{{ item.id }}" class="{{ 'table-success' if item.status == 'done' else ('table-danger' if item.status == 'cancelled' else '') }}">
+                                    <td>{{ item.id_order }}</td>
+                                    <td>{{ item.product_name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.sales_unit or '' }}</td>
+                                    <td>{{ item.delivery_date }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button class="btn {{ 'btn-warning' if item.status == 'pending' else 'btn-outline-warning' }}"
+                                                    onclick="setStatus({{ item.id }}, 'pending')">Pending</button>
+                                            <button class="btn {{ 'btn-success' if item.status == 'done' else 'btn-outline-success' }}"
+                                                    onclick="setStatus({{ item.id }}, 'done')">Done</button>
+                                            <button class="btn {{ 'btn-danger' if item.status == 'cancelled' else 'btn-outline-danger' }}"
+                                                    onclick="setStatus({{ item.id }}, 'cancelled')">Cancelled</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    {% elif from_date and to_date %}
+                    <p class="text-muted">No orders found for the selected period.</p>
+                    {% else %}
+                    <p class="text-muted">Select a date range to view the production summary.</p>
+                    {% endif %}
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ── New Order ─────────────────────────────────────────────────────── */
+const productCatalog = {{ (products | default([]) | tojson) }};
+
+function toggleDelivery() {
+    const isDelivery = document.getElementById('p_delivery').checked;
+    document.getElementById('address-field').style.display = isDelivery ? 'block' : 'none';
+}
+
+function addItemRow() {
+    const tbody = document.getElementById('items-body');
+    if (!tbody) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td>
+            <select class="form-select form-select-sm item-product" onchange="onProductChange(this)">
+                <option value="">-- select --</option>
+                ${productCatalog.map(p =>
+                    `<option value="${p.id_product}" data-price="${p.price_product}">${p.name}</option>`
+                ).join('')}
+            </select>
+        </td>
+        <td><input type="number" class="form-control form-control-sm item-qty" min="1" value="1" oninput="recalcTotal()"></td>
+        <td><input type="number" class="form-control form-control-sm item-price" step="0.01" min="0" value="0.00" oninput="recalcTotal()"></td>
+        <td><input type="text" class="form-control form-control-sm item-obs"></td>
+        <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">✕</button>
+        </td>
+    `;
+    tbody.appendChild(tr);
+}
+
+function onProductChange(select) {
+    const price = select.selectedOptions[0]?.dataset.price || '0';
+    select.closest('tr').querySelector('.item-price').value = parseFloat(price).toFixed(2);
+    recalcTotal();
+}
+
+function removeRow(btn) {
+    btn.closest('tr').remove();
+    recalcTotal();
+}
+
+function recalcTotal() {
+    let total = 0;
+    document.querySelectorAll('#items-body tr').forEach(tr => {
+        const qty   = parseFloat(tr.querySelector('.item-qty')?.value   || 0);
+        const price = parseFloat(tr.querySelector('.item-price')?.value || 0);
+        total += qty * price;
+    });
+    const el = document.getElementById('total-price');
+    if (el) el.value = total.toFixed(2);
+}
+
+const newOrderForm = document.getElementById('form-new-order');
+if (newOrderForm) {
+    newOrderForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const items = [];
+        document.querySelectorAll('#items-body tr').forEach(tr => {
+            const productId = tr.querySelector('.item-product').value;
+            if (!productId) return;
+            items.push({
+                p_id_product:  productId,
+                p_quantity:    tr.querySelector('.item-qty').value,
+                p_unit_price:  tr.querySelector('.item-price').value,
+                p_observation: tr.querySelector('.item-obs').value
+            });
+        });
+
+        if (!document.getElementById('p_id_client').value) {
+            alert('Please select a client.');
+            return;
+        }
+        if (items.length === 0) {
+            alert('Please add at least one item.');
+            return;
+        }
+
+        const isDelivery = document.getElementById('p_delivery').checked;
+        const payload = {
+            p_id_client:       document.getElementById('p_id_client').value,
+            p_delivery:        isDelivery,
+            p_delivery_date:   document.getElementById('p_delivery_date').value || null,
+            p_delivery_time:   document.getElementById('p_delivery_time').value || null,
+            p_delivery_address: isDelivery ? (document.getElementById('p_delivery_address').value || '') : '',
+            p_price:           document.getElementById('total-price').value,
+            items
+        };
+
+        fetch('/orders/insert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert('Order #' + data.id_order + ' created successfully.');
+                window.location.href = '/orders/list';
+            } else {
+                alert('Error creating order.');
+            }
+        });
+    });
+}
+
+/* ── Production status buttons ─────────────────────────────────────── */
+const STATUS_CLASS = { pending: 'btn-warning', done: 'btn-success', cancelled: 'btn-danger' };
+const STATUS_OUTLINE = { pending: 'btn-outline-warning', done: 'btn-outline-success', cancelled: 'btn-outline-danger' };
+const ROW_CLASS = { pending: '', done: 'table-success', cancelled: 'table-danger' };
+
+function setStatus(id, newStatus) {
+    fetch('/orders/production/update_status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: newStatus })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (!data.success) return;
+        const row = document.getElementById('row-' + id);
+        row.classList.remove('table-success', 'table-danger');
+        if (ROW_CLASS[newStatus]) row.classList.add(ROW_CLASS[newStatus]);
+
+        row.querySelectorAll('.btn-group button').forEach(btn => {
+            const s = btn.getAttribute('onclick').match(/'(\w+)'\)$/)[1];
+            btn.classList.remove(...Object.values(STATUS_CLASS), ...Object.values(STATUS_OUTLINE));
+            btn.classList.add(s === newStatus ? STATUS_CLASS[s] : STATUS_OUTLINE[s]);
+        });
+    });
+}
+</script>
+{% endblock %}

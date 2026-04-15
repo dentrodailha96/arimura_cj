@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .nav-btn { width: 100%; margin-bottom: 8px; text-align: left; }
+    .nav-btn.active { background-color: #0d6efd; color: #fff; border-color: #0d6efd; }
+    .section { display: none; }
+    .section.active { display: block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <h4 class="mb-3">Products</h4>
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-0">
+
+                <!-- Left: navigation -->
+                <div class="col-2 border-end pe-3">
+                    <button class="btn btn-outline-primary nav-btn active" onclick="showSection('add', this)">Add new product</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('edit', this)">Edit Product</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('delete', this)">Delete Product</button>
+                </div>
+
+                <!-- Center: forms -->
+                <div class="col-4 border-end px-4">
+
+                    <!-- Add -->
+                    <div id="section-add" class="section active">
+                        <h6 class="mb-3">Add new product form</h6>
+                        <form id="form-add">
+                            <div class="mb-2">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" name="p_nome" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Price</label>
+                                <input type="number" class="form-control" name="p_price_product" step="0.01" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sales Unit</label>
+                                <input type="text" class="form-control" name="p_sales_unit" placeholder="e.g. kg, unit, dozen">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add new product</button>
+                        </form>
+                    </div>
+
+                    <!-- Edit -->
+                    <div id="section-edit" class="section">
+                        <h6 class="mb-3">Edit product</h6>
+                        <div class="mb-3">
+                            <label class="form-label">Id_Product</label>
+                            <select class="form-select" id="edit-select" onchange="loadProduct('edit', this.value)">
+                                <option value="">-- select --</option>
+                                {% for p in products %}
+                                <option value="{{ p.id_product }}">{{ p.id_product }} – {{ p.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <form id="form-edit">
+                            <input type="hidden" name="p_id_product" id="edit-id">
+                            <div class="mb-2">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" name="p_nome" id="edit-name">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Price</label>
+                                <input type="number" class="form-control" name="p_price_product" id="edit-price" step="0.01" min="0">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sales Unit</label>
+                                <input type="text" class="form-control" name="p_sales_unit" id="edit-sales_unit">
+                            </div>
+                            <button type="submit" class="btn btn-warning">Edit Product</button>
+                        </form>
+                    </div>
+
+                    <!-- Delete -->
+                    <div id="section-delete" class="section">
+                        <h6 class="mb-3">Delete Product</h6>
+                        <div class="mb-3">
+                            <label class="form-label">Id Product</label>
+                            <select class="form-select" id="delete-select" onchange="loadProduct('delete', this.value)">
+                                <option value="">-- select --</option>
+                                {% for p in products %}
+                                <option value="{{ p.id_product }}">{{ p.id_product }} – {{ p.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <form id="form-delete">
+                            <input type="hidden" name="p_id_product" id="delete-id">
+                            <div class="mb-2">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="delete-name" disabled>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Price</label>
+                                <input type="text" class="form-control" id="delete-price" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sales Unit</label>
+                                <input type="text" class="form-control" id="delete-sales_unit" disabled>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Delete Product</button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- Right: table -->
+                <div class="col-6 ps-4">
+                    <h6 class="mb-3">Product table</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Sales Unit</th>
+                                    <th>Last Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for p in products %}
+                                <tr>
+                                    <td>{{ p.id_product }}</td>
+                                    <td>{{ p.name }}</td>
+                                    <td>{{ "%.2f"|format(p.price_product) }}</td>
+                                    <td>{{ p.sales_unit or '' }}</td>
+                                    <td>{{ p.last_modified or '' }}</td>
+                                </tr>
+                                {% else %}
+                                <tr><td colspan="5" class="text-center text-muted">No products yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showSection(name, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    btn.classList.add('active');
+}
+
+function loadProduct(mode, id) {
+    if (!id) return;
+    fetch('/products/get/' + id)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById(mode + '-id').value         = data.id_product;
+            document.getElementById(mode + '-name').value       = data.name;
+            document.getElementById(mode + '-price').value      = data.price_product;
+            document.getElementById(mode + '-sales_unit').value = data.sales_unit;
+        });
+}
+
+function postForm(formId, url) {
+    const fd = new FormData(document.getElementById(formId));
+    fetch(url, { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) location.reload();
+            else alert('Error: ' + JSON.stringify(data));
+        });
+}
+
+document.getElementById('form-add').addEventListener('submit', function(e) {
+    e.preventDefault();
+    postForm('form-add', '/products/insert');
+});
+
+document.getElementById('form-edit').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('edit-id').value) {
+        alert('Select a product first.');
+        return;
+    }
+    postForm('form-edit', '/products/update');
+});
+
+document.getElementById('form-delete').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('delete-id').value) {
+        alert('Select a product first.');
+        return;
+    }
+    if (confirm('Delete this product? This action cannot be undone.')) {
+        postForm('form-delete', '/products/delete');
+    }
+});
+</script>
+{% endblock %}
