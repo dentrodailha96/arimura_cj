@@ -20,6 +20,10 @@ CREATE TABLE IF NOT EXISTS arimura_cj.client(
 CREATE TABLE IF NOT EXISTS arimura_cj.orders(
     id_order SERIAL NOT NULL
   , id_client INT NOT NULL
+<<<<<<< HEAD
+=======
+  , status VARCHAR(100) NULL
+>>>>>>> d6f96cf4b3e6e3238d413342771befa19d5b91f4
   , status       TEXT CHECK(status IN ('pending','done','cancelled')) DEFAULT 'pending'
   , price        REAL DEFAULT 0
   , delivery INTEGER DEFAULT 0 
@@ -27,6 +31,7 @@ CREATE TABLE IF NOT EXISTS arimura_cj.orders(
   , delivery_time TIME NOT NULL
   , delivery_address VARCHAR(500)
   , created_at TIMESTAMP NULL
+<<<<<<< HEAD
   , last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE IF NOT EXISTS arimura_cj.order_product(
@@ -37,4 +42,15 @@ CREATE TABLE IF NOT EXISTS arimura_cj.order_product(
   , unit_price DECIMAL(10,2) NULL
   , observation VARCHAR (4000)
   , status TEXT CHECK(status IN ('pending', 'done', 'cancelled')) DEFAULT 'pending'
+=======
+  , last_modified DATETIME DEFAULT CURRENT_TIMESTAMP);
+
+CREATE TABLE IF NOT EXISTS arimura_cj.order_product(
+    id SERIAL NOT NULL
+  , id_order INT 
+  , id_product INT 
+  , quantity INT NOT NULL
+  , unit_price DECIMAL(10,2) NULL
+  , observation VARCHAR (4000)
+>>>>>>> d6f96cf4b3e6e3238d413342771befa19d5b91f4
   , created_at TIMESTAMP NULL);
