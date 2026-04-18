@@ -152,6 +152,7 @@ function showSection(name, btn) {
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('section-' + name).classList.add('active');
     btn.classList.add('active');
+    sessionStorage.setItem('products-section', name);
 }
 
 function loadProduct(mode, id) {
@@ -166,19 +167,24 @@ function loadProduct(mode, id) {
         });
 }
 
-function postForm(formId, url) {
-    const fd = new FormData(document.getElementById(formId));
+function postForm(formId, url, resetOnSuccess) {
+    const form = document.getElementById(formId);
+    const fd = new FormData(form);
     fetch(url, { method: 'POST', body: fd })
         .then(r => r.json())
         .then(data => {
-            if (data.success) location.reload();
-            else alert('Error: ' + JSON.stringify(data));
+            if (data.success) {
+                if (resetOnSuccess) form.reset();
+                location.reload();
+            } else {
+                alert('Error: ' + JSON.stringify(data));
+            }
         });
 }
 
 document.getElementById('form-add').addEventListener('submit', function(e) {
     e.preventDefault();
-    postForm('form-add', '/products/insert');
+    postForm('form-add', '/products/insert', true);
 });
 
 document.getElementById('form-edit').addEventListener('submit', function(e) {
@@ -187,7 +193,7 @@ document.getElementById('form-edit').addEventListener('submit', function(e) {
         alert('Select a product first.');
         return;
     }
-    postForm('form-edit', '/products/update');
+    postForm('form-edit', '/products/update', false);
 });
 
 document.getElementById('form-delete').addEventListener('submit', function(e) {
@@ -197,8 +203,15 @@ document.getElementById('form-delete').addEventListener('submit', function(e) {
         return;
     }
     if (confirm('Delete this product? This action cannot be undone.')) {
-        postForm('form-delete', '/products/delete');
+        postForm('form-delete', '/products/delete', false);
     }
 });
+
+(function restoreSection() {
+    const saved = sessionStorage.getItem('products-section');
+    if (!saved) return;
+    const btn = [...document.querySelectorAll('.nav-btn')].find(b => b.getAttribute('onclick').includes("'" + saved + "'"));
+    if (btn) { btn.click(); }
+})();
 </script>
 {% endblock %}

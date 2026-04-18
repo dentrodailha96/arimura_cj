@@ -114,7 +114,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Client ID</th>
+                                    <th>Client</th>
                                     <th>Status</th>
                                     <th>Price</th>
                                     <th>Delivery</th>
@@ -128,7 +128,7 @@
                                 {% for o in orders %}
                                 <tr>
                                     <td>{{ o.id_order }}</td>
-                                    <td>{{ o.id_client }}</td>
+                                    <td>{{ o.name }}</td>
                                     <td>
                                         <span class="badge
                                             {% if o.status == 'pending' %}bg-warning text-dark
@@ -227,6 +227,7 @@
                                     <th>Unit</th>
                                     <th>Observation</th>
                                     <th>Date</th>
+                                    <th>Created At</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -239,6 +240,7 @@
                                     <td>{{ item.sales_unit or '' }}</td>
                                     <td>{{ item.observation }}</td>
                                     <td>{{ item.delivery_date }}</td>
+                                    <td>{{ item.created_at or '' }}</td>
                                     <td>
                                         <div class="btn-group btn-group-sm" role="group">
                                             <button class="btn {{ 'btn-warning' if item.status == 'pending' else 'btn-outline-warning' }}"
@@ -267,6 +269,7 @@
                                     <th>Qty</th>
                                     <th>Unit</th>
                                     <th>Date</th>
+                                    <th>Created At</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -278,6 +281,7 @@
                                     <td>{{ item.quantity }}</td>
                                     <td>{{ item.sales_unit or '' }}</td>
                                     <td>{{ item.delivery_date }}</td>
+                                    <td>{{ item.created_at or '' }}</td>
                                     <td>
                                         <div class="btn-group btn-group-sm" role="group">
                                             <button class="btn {{ 'btn-warning' if item.status == 'pending' else 'btn-outline-warning' }}"
