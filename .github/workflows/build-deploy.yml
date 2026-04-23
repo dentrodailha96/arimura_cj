@@ -38,7 +38,7 @@ jobs:
           SHA: ${{ steps.short-sha.outputs.sha }}
 
       - name: Build container image
-        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./code
+        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
