@@ -9,6 +9,6 @@ Task: Develop an application that supply the customer needs and adapt to the cus
 
     - Architecture: 
 
-    ![Architecture](docs/Project_Notes.jpg)
+![Architecture](docs/Project_Notes.jpg)
 
 Action: Used Claude Code to develop the HTML frontend from the application and adapted the structures from frontend over the backend architecture. 
