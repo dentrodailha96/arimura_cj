@@ -95,24 +95,26 @@ def list_orders():
     cur = conn.cursor()
     if from_date and to_date:
         cur.execute(
-            """SELECT id_order, id_client, status, price, delivery,
-                      delivery_date, delivery_time, delivery_address, created_at
-               FROM arimura_cj.orders
-               WHERE delivery_date BETWEEN %s AND %s
-               ORDER BY delivery_date DESC, delivery_time""",
+            """SELECT o.id_order, c.name, o.status, o.price, o.delivery,
+                      o.delivery_date, o.delivery_time, o.delivery_address, o.created_at
+               FROM arimura_cj.orders o
+               LEFT JOIN arimura_cj.client c ON o.id_client = c.id_client
+               WHERE o.delivery_date BETWEEN %s AND %s
+               ORDER BY o.delivery_date DESC, o.delivery_time""",
             (from_date, to_date)
         )
     else:
         cur.execute(
-            """SELECT id_order, id_client, status, price, delivery,
-                      delivery_date, delivery_time, delivery_address, created_at
-               FROM arimura_cj.orders
-               ORDER BY delivery_date DESC, delivery_time"""
+            """SELECT o.id_order, c.name, o.status, o.price, o.delivery,
+                      o.delivery_date, o.delivery_time, o.delivery_address, o.created_at
+               FROM arimura_cj.orders o
+               LEFT JOIN arimura_cj.client c ON o.id_client = c.id_client
+               ORDER BY o.delivery_date DESC, o.delivery_time"""
         )
     rows = cur.fetchall()
     cur.close()
     conn.close()
-    cols = ['id_order', 'id_client', 'status', 'price', 'delivery',
+    cols = ['id_order', 'name', 'status', 'price', 'delivery',
             'delivery_date', 'delivery_time', 'delivery_address', 'created_at']
     orders_list = [dict(zip(cols, r)) for r in rows]
     return render_template(
@@ -170,7 +172,7 @@ def production():
         cur.execute(
             """SELECT op.id, op.id_order, p.name AS product_name,
                       op.quantity, p.sales_unit, op.observation, op.status,
-                      o.delivery_date, o.delivery_time
+                      o.delivery_date, o.delivery_time, op.created_at
                FROM arimura_cj.order_product op
                JOIN arimura_cj.orders o ON op.id_order = o.id_order
                JOIN arimura_cj.products p ON op.id_product = p.id_product
@@ -179,7 +181,7 @@ def production():
             (from_date, to_date)
         )
         cols = ['id', 'id_order', 'product_name', 'quantity', 'sales_unit',
-                'observation', 'status', 'delivery_date', 'delivery_time']
+                'observation', 'status', 'delivery_date', 'delivery_time', 'created_at']
         items = [dict(zip(cols, r)) for r in cur.fetchall()]
         cur.close()
         conn.close()
