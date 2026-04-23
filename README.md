@@ -7,7 +7,7 @@ Situation: Customer need an automatization of the system to organize better the 
 
 Task: Develop an application that supply the customer needs and adapt to the customer technical hability.
 
-    - Architecture: 
+ - Architecture: 
 
 <<<<<<< HEAD
 <<<<<<< HEAD
