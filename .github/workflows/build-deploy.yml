@@ -103,6 +103,8 @@ jobs:
             docker stop ${{ vars.IMAGE_NAME }} || true
             # Remove old container
             docker rm ${{ vars.IMAGE_NAME}} || true
+            # Clean all old images before pulling new ones
+            docker system prune -af 
             # Pull the new image
             docker pull ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ needs.build_and_push.outputs.sha }}
             # Run a new container from a new image
