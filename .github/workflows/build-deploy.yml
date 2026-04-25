@@ -5,7 +5,7 @@ name: CICD
 on:
   # Triggers the workflow on push events but only for the master branch
   push:
-    branches: [ local-v2 ]
+    branches: [ main, local-v2, DO ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
           SHA: ${{ steps.short-sha.outputs.sha }}
 
       - name: Build container image
-        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./code
+        run: docker build -t ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}  ./
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -75,6 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     needs: build_and_push
     
     steps:
@@ -103,6 +104,8 @@ jobs:
             docker stop ${{ vars.IMAGE_NAME }} || true
             # Remove old container
             docker rm ${{ vars.IMAGE_NAME}} || true
+            # Clean all old images before pulling new ones
+            docker system prune -af 
             # Pull the new image
             docker pull ${{ vars.REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ needs.build_and_push.outputs.sha }}
             # Run a new container from a new image
