@@ -44,18 +44,19 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-    
-      - name: Log in and push to DigitalOcean Container Registry
-        run: |
-          echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} --password-stdin
-          docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
+
       - name: Remove all old images
         run: |
           doctl registry repository list-tags ${{ vars.IMAGE_NAME }} \
             --no-header --format Tag \
             | grep -v ${{ steps.short-sha.outputs.sha }} \
             | xargs -r -I {} doctl registry repository delete-tag ${{ vars.IMAGE_NAME }} {} --force || true
-            
+    
+      - name: Log in and push to DigitalOcean Container Registry
+        run: |
+          echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} --password-stdin
+          docker push ${{ vars.REGISTRY}}/${{ vars.IMAGE_NAME}}:${{ steps.short-sha.outputs.sha }}
+
       - name: Garbage collect registry
         run: |
           doctl registry garbage-collection start --include-untagged-manifests --force
