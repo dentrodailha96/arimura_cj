@@ -9,8 +9,7 @@ Task: Develop an application that supply the customer needs and adapt to the cus
 
  - Architecture: 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 ![Architecture](docs/Project_Notes.jpg)
 =======
 <img width="736" height="1163" alt="Project_Notes" src="https://github.com/user-attachments/assets/9fe111d7-619b-4b51-a9bf-72e69216b1c0" />
