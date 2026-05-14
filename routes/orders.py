@@ -7,7 +7,7 @@ orders_bp = Blueprint('orders', __name__, url_prefix='/orders')
 
 
 def _get_clients():
-    conn = get_connection()
+    conn = get_connection('dev')
     cur = conn.cursor()
     cur.execute("SELECT id_client, name FROM arimura_cj.client ORDER BY id_client")
     rows = cur.fetchall()

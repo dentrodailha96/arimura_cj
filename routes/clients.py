@@ -8,7 +8,7 @@ clients_bp = Blueprint('clients', __name__, url_prefix='/clients')
 
 @clients_bp.route('/', strict_slashes=False)
 def clients():
-    conn = get_connection()
+    conn = get_connection('dev')
     cur = conn.cursor()
     cur.execute(
         "SELECT id_client, name, telephone, address, email, last_modified "

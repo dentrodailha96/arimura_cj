@@ -9,7 +9,7 @@ products_bp = Blueprint('products', __name__, url_prefix='/products')
 
 @products_bp.route('/', strict_slashes=False)
 def products():
-    conn = get_connection()
+    conn = get_connection('dev')
     cur = conn.cursor()
     cur.execute(
         "SELECT id_product, name, price_product, sales_unit, last_modified "
