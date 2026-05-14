@@ -10,6 +10,7 @@ from routes.orders import orders_bp
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.environ.get('SECRET_KEY', 'dev')
+app.config['ENVIRONMENT'] = os.environ.get('APP_ENV', 'dev')
 
 app.register_blueprint(clients_bp)
 app.register_blueprint(products_bp)

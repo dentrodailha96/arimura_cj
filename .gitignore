@@ -4,8 +4,6 @@
 .env.*
 
 # Virtual environment
-venv/
-env/
 .venv/
 
 # Python cache

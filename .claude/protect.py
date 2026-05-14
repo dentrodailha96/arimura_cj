@@ -7,7 +7,7 @@ tool_name = input_data.get("tool_name", "")
 tool_input = input_data.get("tool_input", {})
 
 # Files to protect
-protected = [".env", ".gitignore"]
+protected = [".env", ".gitignore", ".env.dev", ".env.prod"]
 
 # Check all input values for protected filenames
 input_str = json.dumps(tool_input)

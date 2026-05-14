@@ -1,13 +1,12 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.config'))
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, current_app
 from db_connection import get_connection
 
 orders_bp = Blueprint('orders', __name__, url_prefix='/orders')
 
-
 def _get_clients():
-    conn = get_connection('dev')
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute("SELECT id_client, name FROM arimura_cj.client ORDER BY id_client")
     rows = cur.fetchall()
@@ -17,7 +16,7 @@ def _get_clients():
 
 
 def _get_products():
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "SELECT id_product, name, price_product "
@@ -56,7 +55,7 @@ def insert_order():
     price = data.get('p_price', 0)
     items = data.get('items', [])
 
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         """INSERT INTO arimura_cj.orders
@@ -91,7 +90,7 @@ def insert_order():
 def list_orders():
     from_date = request.args.get('from_date', '')
     to_date = request.args.get('to_date', '')
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     if from_date and to_date:
         cur.execute(
@@ -130,7 +129,7 @@ def list_orders():
 @orders_bp.route('/detailed')
 def order_detailed():
     id_order = request.args.get('id_order', type=int)
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "SELECT id_order FROM arimura_cj.orders ORDER BY id_order DESC"
@@ -167,7 +166,7 @@ def production():
     with_obs = []
     without_obs = []
     if from_date and to_date:
-        conn = get_connection()
+        conn = get_connection(current_app.config['ENVIRONMENT'])
         cur = conn.cursor()
         cur.execute(
             """SELECT op.id, op.id_order, p.name AS product_name,
@@ -205,7 +204,7 @@ def update_item_status():
     status = data.get('status')
     if status not in ('pending', 'done', 'cancelled'):
         return jsonify({'success': False, 'error': 'Invalid status'})
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "UPDATE arimura_cj.order_product SET status = %s WHERE id = %s RETURNING id_order",
