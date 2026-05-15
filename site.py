@@ -8,9 +8,11 @@ from routes.clients import clients_bp
 from routes.products import products_bp
 from routes.orders import orders_bp
 
+environment = 'prod'
+
 app = Flask(__name__, template_folder='templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'dev')
-app.config['ENVIRONMENT'] = os.environ.get('APP_ENV', 'dev')
+app.secret_key = os.environ.get('SECRET_KEY', environment)
+app.config['ENVIRONMENT'] = os.environ.get('APP_ENV', environment)
 
 app.register_blueprint(clients_bp)
 app.register_blueprint(products_bp)
@@ -23,4 +25,7 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    if environment == 'dev':
+        app.run(host='0.0.0.0', port=5001, debug=True)
+    else: 
+        app.run(host='0.0.0.0', port=5000, debug=True)
