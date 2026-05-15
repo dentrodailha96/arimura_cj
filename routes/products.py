@@ -1,15 +1,14 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.config'))
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, current_app
 from datetime import datetime
 from db_connection import get_connection
 
 products_bp = Blueprint('products', __name__, url_prefix='/products')
 
-
 @products_bp.route('/', strict_slashes=False)
 def products():
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "SELECT id_product, name, price_product, sales_unit, last_modified "
@@ -25,7 +24,7 @@ def products():
 
 @products_bp.route('/get/<int:id_product>')
 def get_product(id_product):
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "SELECT id_product, name, price_product, sales_unit "
@@ -50,7 +49,7 @@ def insert_product():
     name = request.form.get('p_nome')
     price_product = request.form.get('p_price_product')
     sales_unit = request.form.get('p_sales_unit')
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         """INSERT INTO arimura_cj.products (name, price_product, sales_unit, last_modified)
@@ -69,7 +68,7 @@ def update_product():
     name = request.form.get('p_nome')
     price_product = request.form.get('p_price_product')
     sales_unit = request.form.get('p_sales_unit')
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "UPDATE arimura_cj.products "
@@ -86,7 +85,7 @@ def update_product():
 @products_bp.route('/delete', methods=['POST'])
 def delete_product():
     id_product = request.form.get('p_id_product')
-    conn = get_connection()
+    conn = get_connection(current_app.config['ENVIRONMENT'])
     cur = conn.cursor()
     cur.execute(
         "DELETE FROM arimura_cj.products WHERE id_product = %s",

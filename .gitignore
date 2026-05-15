@@ -1,10 +1,9 @@
 # Environment variables
-.env
+.env_prod
+.env_dev
 .env.*
 
 # Virtual environment
-venv/
-env/
 .venv/
 
 # Python cache

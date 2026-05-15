@@ -10,6 +10,7 @@ from routes.orders import orders_bp
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.environ.get('SECRET_KEY', 'dev')
+app.config['ENVIRONMENT'] = os.environ.get('APP_ENV', 'dev')
 
 app.register_blueprint(clients_bp)
 app.register_blueprint(products_bp)
@@ -22,4 +23,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
