@@ -1,6 +1,6 @@
 # Environment variables
-.env_prod
-.env_dev
+.env.prod
+.env.dev
 .env.*
 
 # Virtual environment
