@@ -15,7 +15,7 @@ COPY routes/ routes/
 COPY sql/ sql/
 COPY templates/ templates/
 COPY site.py .
-COPY .config/ .config/db_connection.py
+COPY .config/ .config/
 
 # CMD start to run as soon as the image is created
 CMD ["python3", "site.py"]
