@@ -1,6 +1,5 @@
 # Environment variables
-.env.prod
-.env.dev
+.env
 .env.*
 
 # Virtual environment
@@ -10,9 +9,6 @@
 __pycache__/
 *.py[cod]
 *.pyo
-
-# Database connection files with credentials
-db_connection.py
 
 # IDE
 .vscode/
