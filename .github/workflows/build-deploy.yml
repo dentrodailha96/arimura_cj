@@ -45,13 +45,13 @@ jobs:
           port: 22
           script: |
             echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} --password-stdin
-            docker stop arimura-prod || true
-            docker rm arimura-prod || true
+            docker stop arimura-cj || true
+            docker rm arimura-cj || true
             docker system prune -af
             docker pull ${{ vars.REGISTRY }}/arimura-cj:latest
             docker run -d \
               --restart always \
-              --name arimura-prod \
+              --name arimura-cj \
               -p 5000:5000 \
-              --env-file /opt/arimura/.env \
+              --env-file /opt/arimura_cj/.env \
               ${{ vars.REGISTRY }}/arimura-cj:latest
