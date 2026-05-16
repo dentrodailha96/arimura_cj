@@ -22,6 +22,13 @@ jobs:
       - name: Build Docker image
         run: docker build -t ${{ vars.REGISTRY }}/arimura-cj:latest .
 
+      - name: Clean old images from registry
+        run: |
+          doctl registry repository list-tags arimura-cj \
+            --no-header --format Tag \
+            | xargs -r -I {} doctl registry repository delete-tag arimura-cj {} --force || true
+          doctl registry garbage-collection start --include-untagged-manifests --force
+
       - name: Push image to registry
         run: docker push ${{ vars.REGISTRY }}/arimura-cj:latest
 
