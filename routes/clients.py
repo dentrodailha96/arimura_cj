@@ -1,13 +1,13 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '.config'))
-from flask import Blueprint, render_template, request, jsonify, current_app
+from flask import Blueprint, render_template, request, jsonify
 from db_connection import get_connection
 
 clients_bp = Blueprint('clients', __name__, url_prefix='/clients')
 
 @clients_bp.route('/', strict_slashes=False)
 def clients():
-    conn = get_connection(current_app.config['ENVIRONMENT'])
+    conn = get_connection()
     cur = conn.cursor()
     cur.execute(
         "SELECT id_client, name, telephone, address, email, last_modified "
@@ -23,7 +23,7 @@ def clients():
 
 @clients_bp.route('/get/<int:id_client>')
 def get_client(id_client):
-    conn = get_connection(current_app.config['ENVIRONMENT'])
+    conn = get_connection()
     cur = conn.cursor()
     cur.execute(
         "SELECT id_client, name, telephone, address, email "
@@ -50,7 +50,7 @@ def insert_client():
     telephone = request.form.get('p_telephone')
     address = request.form.get('p_address')
     email = request.form.get('p_email')
-    conn = get_connection(current_app.config['ENVIRONMENT'])
+    conn = get_connection()
     cur = conn.cursor()
     cur.execute(
         "INSERT INTO arimura_cj.client (name, telephone, address, email) "
@@ -70,7 +70,7 @@ def update_client():
     telephone = request.form.get('p_telephone')
     address = request.form.get('p_address')
     email = request.form.get('p_email')
-    conn = get_connection(current_app.config['ENVIRONMENT'])
+    conn = get_connection()
     cur = conn.cursor()
     cur.execute(
         "UPDATE arimura_cj.client "
@@ -87,7 +87,7 @@ def update_client():
 @clients_bp.route('/delete', methods=['POST'])
 def delete_client():
     id_client = request.form.get('p_id_client')
-    conn = get_connection(current_app.config['ENVIRONMENT'])
+    conn = get_connection()
     cur = conn.cursor()
     cur.execute(
         "DELETE FROM arimura_cj.client WHERE id_client = %s",
