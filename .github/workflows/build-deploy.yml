@@ -53,5 +53,5 @@ jobs:
               --restart always \
               --name arimura-cj \
               -p 5000:5000 \
-              --env-file /opt/arimura_cj/.env \
+              --env-file arimura_cj/.env \
               ${{ vars.REGISTRY }}/arimura-cj:latest
