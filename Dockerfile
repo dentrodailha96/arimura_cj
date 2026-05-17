@@ -16,7 +16,6 @@ COPY sql/ sql/
 COPY templates/ templates/
 COPY site.py .
 COPY .config/ .config/
-COPY .env.prod .
 
 # CMD start to run as soon as the image is created
 CMD ["python3", "site.py"]
