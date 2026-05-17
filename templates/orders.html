@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Orders{% endblock %}
+{% block title %}Pedidos{% endblock %}
 
 {% block extra_styles %}
 <style>
@@ -11,32 +11,32 @@
 
 {% block content %}
 <div class="container-fluid py-3">
-    <h4 class="mb-3">Orders</h4>
+    <h4 class="mb-3">Pedidos</h4>
     <div class="card">
         <div class="card-body">
             <div class="row g-0">
 
-                <!-- Left: navigation -->
+                <!-- Esquerda: navegação -->
                 <div class="col-2 border-end pe-3">
-                    <a href="/orders/new"        class="btn btn-outline-primary nav-btn {% if active == 'new' %}active-nav{% endif %}">New Order Forms</a>
-                    <a href="/orders/list"       class="btn btn-outline-primary nav-btn {% if active == 'list' %}active-nav{% endif %}">Orders</a>
-                    <a href="/orders/detailed"   class="btn btn-outline-primary nav-btn {% if active == 'detailed' %}active-nav{% endif %}">Order Detailed</a>
-                    <a href="/orders/production" class="btn btn-outline-primary nav-btn {% if active == 'production' %}active-nav{% endif %}">Production</a>
+                    <a href="/orders/new"        class="btn btn-outline-primary nav-btn {% if active == 'new' %}active-nav{% endif %}">Novo Pedido</a>
+                    <a href="/orders/list"       class="btn btn-outline-primary nav-btn {% if active == 'list' %}active-nav{% endif %}">Pedidos</a>
+                    <a href="/orders/detailed"   class="btn btn-outline-primary nav-btn {% if active == 'detailed' %}active-nav{% endif %}">Pedido Detalhado</a>
+                    <a href="/orders/production" class="btn btn-outline-primary nav-btn {% if active == 'production' %}active-nav{% endif %}">Produção</a>
                 </div>
 
-                <!-- Right: content area -->
+                <!-- Direita: área de conteúdo -->
                 <div class="col-10 ps-4">
 
-                    {# ── NEW ORDER ──────────────────────────────────────────── #}
+                    {# ── NOVO PEDIDO ─────────────────────────────────────────── #}
                     {% if active == 'new' %}
-                    <h6 class="mb-3">New order form</h6>
+                    <h6 class="mb-3">Formulário de novo pedido</h6>
                     <form id="form-new-order">
 
                         <div class="row mb-3">
                             <div class="col-5">
-                                <label class="form-label">Client</label>
+                                <label class="form-label">Cliente</label>
                                 <select class="form-select" id="p_id_client" required>
-                                    <option value="">-- select client --</option>
+                                    <option value="">-- selecionar cliente --</option>
                                     {% for c in clients %}
                                     <option value="{{ c.id_client }}">{{ c.name }}</option>
                                     {% endfor %}
@@ -45,39 +45,39 @@
                             <div class="col-3 d-flex align-items-end pb-1">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="p_delivery" onchange="toggleDelivery()">
-                                    <label class="form-check-label fw-semibold" for="p_delivery">Delivery</label>
+                                    <label class="form-check-label fw-semibold" for="p_delivery">Entrega</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-3">
-                                <label class="form-label">Date</label>
+                                <label class="form-label">Data</label>
                                 <input type="date" class="form-control" id="p_delivery_date" required>
                             </div>
                             <div class="col-3">
-                                <label class="form-label">Time</label>
+                                <label class="form-label">Hora</label>
                                 <input type="time" class="form-control" id="p_delivery_time" required>
                             </div>
                             <div class="col-5" id="address-field" style="display:none">
-                                <label class="form-label">Delivery Address</label>
+                                <label class="form-label">Endereço de Entrega</label>
                                 <input type="text" class="form-control" id="p_delivery_address">
                             </div>
                         </div>
 
                         <hr>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0">Order Items</h6>
-                            <button type="button" class="btn btn-sm btn-secondary" onclick="addItemRow()">+ Add Item</button>
+                            <h6 class="mb-0">Itens do Pedido</h6>
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="addItemRow()">+ Adicionar Item</button>
                         </div>
                         <div class="table-responsive mb-3">
                             <table class="table table-sm table-bordered align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width:30%">Product</th>
-                                        <th style="width:12%">Quantity</th>
-                                        <th style="width:14%">Unit Price</th>
-                                        <th>Observation</th>
+                                        <th style="width:30%">Produto</th>
+                                        <th style="width:12%">Quantidade</th>
+                                        <th style="width:14%">Preço Unitário</th>
+                                        <th>Observação</th>
                                         <th style="width:5%"></th>
                                     </tr>
                                 </thead>
@@ -87,25 +87,25 @@
 
                         <div class="row mb-3">
                             <div class="col-3">
-                                <label class="form-label fw-semibold">Total Price</label>
+                                <label class="form-label fw-semibold">Preço Total</label>
                                 <input type="text" class="form-control fw-bold" id="total-price" readonly value="0.00">
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">New Order</button>
+                        <button type="submit" class="btn btn-primary">Novo Pedido</button>
                     </form>
 
-                    {# ── ORDERS LIST ─────────────────────────────────────────── #}
+                    {# ── LISTA DE PEDIDOS ────────────────────────────────────── #}
                     {% elif active == 'list' %}
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">Orders</h6>
+                        <h6 class="mb-0">Pedidos</h6>
                         <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/list">
                             <input type="date" class="form-control form-control-sm" name="from_date" value="{{ from_date }}">
-                            <span class="text-muted">to</span>
+                            <span class="text-muted">até</span>
                             <input type="date" class="form-control form-control-sm" name="to_date" value="{{ to_date }}">
-                            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
                             {% if from_date or to_date %}
-                            <a href="/orders/list" class="btn btn-sm btn-outline-secondary">Clear</a>
+                            <a href="/orders/list" class="btn btn-sm btn-outline-secondary">Limpar</a>
                             {% endif %}
                         </form>
                     </div>
@@ -114,14 +114,14 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Client</th>
+                                    <th>Cliente</th>
                                     <th>Status</th>
-                                    <th>Price</th>
-                                    <th>Delivery</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Address</th>
-                                    <th>Created At</th>
+                                    <th>Preço</th>
+                                    <th>Entrega</th>
+                                    <th>Data</th>
+                                    <th>Hora</th>
+                                    <th>Endereço</th>
+                                    <th>Criado Em</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -134,31 +134,34 @@
                                             {% if o.status == 'pending' %}bg-warning text-dark
                                             {% elif o.status == 'done' %}bg-success
                                             {% else %}bg-secondary{% endif %}">
-                                            {{ o.status }}
+                                            {% if o.status == 'pending' %}Pendente
+                                            {% elif o.status == 'done' %}Concluído
+                                            {% elif o.status == 'cancelled' %}Cancelado
+                                            {% else %}{{ o.status }}{% endif %}
                                         </span>
                                     </td>
                                     <td>{{ "%.2f"|format(o.price) }}</td>
-                                    <td>{{ 'Yes' if o.delivery else 'No' }}</td>
+                                    <td>{{ 'Sim' if o.delivery else 'Não' }}</td>
                                     <td>{{ o.delivery_date }}</td>
                                     <td>{{ o.delivery_time }}</td>
                                     <td>{{ o.delivery_address or '' }}</td>
                                     <td>{{ o.created_at }}</td>
                                 </tr>
                                 {% else %}
-                                <tr><td colspan="9" class="text-center text-muted">No orders found.</td></tr>
+                                <tr><td colspan="9" class="text-center text-muted">Nenhum pedido encontrado.</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
 
-                    {# ── ORDER DETAILED ──────────────────────────────────────── #}
+                    {# ── PEDIDO DETALHADO ────────────────────────────────────── #}
                     {% elif active == 'detailed' %}
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">Order Detailed</h6>
+                        <h6 class="mb-0">Pedido Detalhado</h6>
                         <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/detailed">
-                            <label class="form-label mb-0">Order ID</label>
+                            <label class="form-label mb-0">ID do Pedido</label>
                             <select class="form-select form-select-sm" name="id_order" onchange="this.form.submit()" style="width:auto">
-                                <option value="">-- select order --</option>
+                                <option value="">-- selecionar pedido --</option>
                                 {% for oid in order_ids %}
                                 <option value="{{ oid }}" {% if oid == selected_order %}selected{% endif %}>{{ oid }}</option>
                                 {% endfor %}
@@ -170,12 +173,12 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Order</th>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Price</th>
-                                    <th>Observation</th>
-                                    <th>Created At</th>
+                                    <th>Pedido</th>
+                                    <th>Produto</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço Unitário</th>
+                                    <th>Observação</th>
+                                    <th>Criado Em</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -191,24 +194,24 @@
                                 </tr>
                                 {% else %}
                                 <tr><td colspan="7" class="text-center text-muted">
-                                    {% if selected_order %}No items for this order.{% else %}Select an order to see its items.{% endif %}
+                                    {% if selected_order %}Nenhum item neste pedido.{% else %}Selecione um pedido para ver seus itens.{% endif %}
                                 </td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
 
-                    {# ── PRODUCTION ──────────────────────────────────────────── #}
+                    {# ── PRODUÇÃO ────────────────────────────────────────────── #}
                     {% elif active == 'production' %}
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">Production</h6>
+                        <h6 class="mb-0">Produção</h6>
                         <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/production">
                             <input type="date" class="form-control form-control-sm" name="from_date" value="{{ from_date }}">
-                            <span class="text-muted">to</span>
+                            <span class="text-muted">até</span>
                             <input type="date" class="form-control form-control-sm" name="to_date" value="{{ to_date }}">
-                            <button type="submit" class="btn btn-sm btn-primary">Get Production</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Ver Produção</button>
                             {% if from_date or to_date %}
-                            <a href="/orders/production" class="btn btn-sm btn-outline-secondary">Clear</a>
+                            <a href="/orders/production" class="btn btn-sm btn-outline-secondary">Limpar</a>
                             {% endif %}
                         </form>
                     </div>
@@ -216,18 +219,18 @@
                     {% if with_obs or without_obs %}
 
                     {% if with_obs %}
-                    <h6 class="mb-2 text-danger">With Observations</h6>
+                    <h6 class="mb-2 text-danger">Com Observações</h6>
                     <div class="table-responsive mb-4">
                         <table class="table table-sm table-bordered align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Product</th>
-                                    <th>Qty</th>
-                                    <th>Unit</th>
-                                    <th>Observation</th>
-                                    <th>Date</th>
-                                    <th>Created At</th>
+                                    <th>Pedido</th>
+                                    <th>Produto</th>
+                                    <th>Qtd</th>
+                                    <th>Unidade</th>
+                                    <th>Observação</th>
+                                    <th>Data</th>
+                                    <th>Criado Em</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -244,11 +247,11 @@
                                     <td>
                                         <div class="btn-group btn-group-sm" role="group">
                                             <button class="btn {{ 'btn-warning' if item.status == 'pending' else 'btn-outline-warning' }}"
-                                                    onclick="setStatus({{ item.id }}, 'pending')">Pending</button>
+                                                    onclick="setStatus({{ item.id }}, 'pending')">Pendente</button>
                                             <button class="btn {{ 'btn-success' if item.status == 'done' else 'btn-outline-success' }}"
-                                                    onclick="setStatus({{ item.id }}, 'done')">Done</button>
+                                                    onclick="setStatus({{ item.id }}, 'done')">Concluído</button>
                                             <button class="btn {{ 'btn-danger' if item.status == 'cancelled' else 'btn-outline-danger' }}"
-                                                    onclick="setStatus({{ item.id }}, 'cancelled')">Cancelled</button>
+                                                    onclick="setStatus({{ item.id }}, 'cancelled')">Cancelado</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -259,17 +262,17 @@
                     {% endif %}
 
                     {% if without_obs %}
-                    <h6 class="mb-2">Without Observations</h6>
+                    <h6 class="mb-2">Sem Observações</h6>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Product</th>
-                                    <th>Qty</th>
-                                    <th>Unit</th>
-                                    <th>Date</th>
-                                    <th>Created At</th>
+                                    <th>Pedido</th>
+                                    <th>Produto</th>
+                                    <th>Qtd</th>
+                                    <th>Unidade</th>
+                                    <th>Data</th>
+                                    <th>Criado Em</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -285,11 +288,11 @@
                                     <td>
                                         <div class="btn-group btn-group-sm" role="group">
                                             <button class="btn {{ 'btn-warning' if item.status == 'pending' else 'btn-outline-warning' }}"
-                                                    onclick="setStatus({{ item.id }}, 'pending')">Pending</button>
+                                                    onclick="setStatus({{ item.id }}, 'pending')">Pendente</button>
                                             <button class="btn {{ 'btn-success' if item.status == 'done' else 'btn-outline-success' }}"
-                                                    onclick="setStatus({{ item.id }}, 'done')">Done</button>
+                                                    onclick="setStatus({{ item.id }}, 'done')">Concluído</button>
                                             <button class="btn {{ 'btn-danger' if item.status == 'cancelled' else 'btn-outline-danger' }}"
-                                                    onclick="setStatus({{ item.id }}, 'cancelled')">Cancelled</button>
+                                                    onclick="setStatus({{ item.id }}, 'cancelled')">Cancelado</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -300,9 +303,9 @@
                     {% endif %}
 
                     {% elif from_date and to_date %}
-                    <p class="text-muted">No orders found for the selected period.</p>
+                    <p class="text-muted">Nenhum pedido encontrado no período selecionado.</p>
                     {% else %}
-                    <p class="text-muted">Select a date range to view the production summary.</p>
+                    <p class="text-muted">Selecione um intervalo de datas para ver o resumo de produção.</p>
                     {% endif %}
 
                     {% endif %}
@@ -314,7 +317,7 @@
 </div>
 
 <script>
-/* ── New Order ─────────────────────────────────────────────────────── */
+/* ── Novo Pedido ────────────────────────────────────────────────────── */
 const productCatalog = {{ (products | default([]) | tojson) }};
 
 function toggleDelivery() {
@@ -329,7 +332,7 @@ function addItemRow() {
     tr.innerHTML = `
         <td>
             <select class="form-select form-select-sm item-product" onchange="onProductChange(this)">
-                <option value="">-- select --</option>
+                <option value="">-- selecionar --</option>
                 ${productCatalog.map(p =>
                     `<option value="${p.id_product}" data-price="${p.price_product}">${p.name}</option>`
                 ).join('')}
@@ -385,11 +388,11 @@ if (newOrderForm) {
         });
 
         if (!document.getElementById('p_id_client').value) {
-            alert('Please select a client.');
+            alert('Por favor, selecione um cliente.');
             return;
         }
         if (items.length === 0) {
-            alert('Please add at least one item.');
+            alert('Por favor, adicione pelo menos um item.');
             return;
         }
 
@@ -412,16 +415,16 @@ if (newOrderForm) {
         .then(r => r.json())
         .then(data => {
             if (data.success) {
-                alert('Order #' + data.id_order + ' created successfully.');
+                alert('Pedido #' + data.id_order + ' criado com sucesso.');
                 window.location.href = '/orders/list';
             } else {
-                alert('Error creating order.');
+                alert('Erro ao criar pedido.');
             }
         });
     });
 }
 
-/* ── Production status buttons ─────────────────────────────────────── */
+/* ── Botões de status da produção ──────────────────────────────────── */
 const STATUS_CLASS = { pending: 'btn-warning', done: 'btn-success', cancelled: 'btn-danger' };
 const STATUS_OUTLINE = { pending: 'btn-outline-warning', done: 'btn-outline-success', cancelled: 'btn-outline-danger' };
 const ROW_CLASS = { pending: '', done: 'table-success', cancelled: 'table-danger' };

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Clients{% endblock %}
+{% block title %}Clientes{% endblock %}
 
 {% block extra_styles %}
 <style>
@@ -13,52 +13,52 @@
 
 {% block content %}
 <div class="container-fluid py-3">
-    <h4 class="mb-3">Client</h4>
+    <h4 class="mb-3">Cliente</h4>
     <div class="card">
         <div class="card-body">
             <div class="row g-0">
 
-                <!-- Left: navigation -->
+                <!-- Esquerda: navegação -->
                 <div class="col-2 border-end pe-3">
-                    <button class="btn btn-outline-primary nav-btn active" onclick="showSection('add', this)">Add new customer</button>
-                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('edit', this)">Edit Customer</button>
-                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('delete', this)">Delete Customer</button>
+                    <button class="btn btn-outline-primary nav-btn active" onclick="showSection('add', this)">Adicionar novo cliente</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('edit', this)">Editar Cliente</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('delete', this)">Excluir Cliente</button>
                 </div>
 
-                <!-- Center: forms -->
+                <!-- Centro: formulários -->
                 <div class="col-4 border-end px-4">
 
-                    <!-- Add -->
+                    <!-- Adicionar -->
                     <div id="section-add" class="section active">
-                        <h6 class="mb-3">Add new customer form</h6>
+                        <h6 class="mb-3">Formulário de novo cliente</h6>
                         <form id="form-add">
                             <div class="mb-2">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" name="p_nome" required>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Telephone</label>
+                                <label class="form-label">Telefone</label>
                                 <input type="text" class="form-control" name="p_telephone" required>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Address</label>
+                                <label class="form-label">Endereço</label>
                                 <input type="text" class="form-control" name="p_address">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">E-mail</label>
                                 <input type="email" class="form-control" name="p_email">
                             </div>
-                            <button type="submit" class="btn btn-primary">Add new customer</button>
+                            <button type="submit" class="btn btn-primary">Adicionar novo cliente</button>
                         </form>
                     </div>
 
-                    <!-- Edit -->
+                    <!-- Editar -->
                     <div id="section-edit" class="section">
-                        <h6 class="mb-3">Edit Customer</h6>
+                        <h6 class="mb-3">Editar Cliente</h6>
                         <div class="mb-3">
-                            <label class="form-label">Id_Customer</label>
+                            <label class="form-label">ID do Cliente</label>
                             <select class="form-select" id="edit-select" onchange="loadClient('edit', this.value)">
-                                <option value="">-- select --</option>
+                                <option value="">-- selecionar --</option>
                                 {% for c in clients %}
                                 <option value="{{ c.id_client }}">{{ c.id_client }} – {{ c.name }}</option>
                                 {% endfor %}
@@ -67,32 +67,32 @@
                         <form id="form-edit">
                             <input type="hidden" name="p_id_client" id="edit-id">
                             <div class="mb-2">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" name="p_nome" id="edit-name">
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Telephone</label>
+                                <label class="form-label">Telefone</label>
                                 <input type="text" class="form-control" name="p_telephone" id="edit-telephone">
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Address</label>
+                                <label class="form-label">Endereço</label>
                                 <input type="text" class="form-control" name="p_address" id="edit-address">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">E-mail</label>
                                 <input type="email" class="form-control" name="p_email" id="edit-email">
                             </div>
-                            <button type="submit" class="btn btn-warning">Edit Customer</button>
+                            <button type="submit" class="btn btn-warning">Editar Cliente</button>
                         </form>
                     </div>
 
-                    <!-- Delete -->
+                    <!-- Excluir -->
                     <div id="section-delete" class="section">
-                        <h6 class="mb-3">Delete Customer</h6>
+                        <h6 class="mb-3">Excluir Cliente</h6>
                         <div class="mb-3">
-                            <label class="form-label">Id Customer</label>
+                            <label class="form-label">ID do Cliente</label>
                             <select class="form-select" id="delete-select" onchange="loadClient('delete', this.value)">
-                                <option value="">-- select --</option>
+                                <option value="">-- selecionar --</option>
                                 {% for c in clients %}
                                 <option value="{{ c.id_client }}">{{ c.id_client }} – {{ c.name }}</option>
                                 {% endfor %}
@@ -101,40 +101,40 @@
                         <form id="form-delete">
                             <input type="hidden" name="p_id_client" id="delete-id">
                             <div class="mb-2">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" id="delete-name" disabled>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Telephone</label>
+                                <label class="form-label">Telefone</label>
                                 <input type="text" class="form-control" id="delete-telephone" disabled>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Address</label>
+                                <label class="form-label">Endereço</label>
                                 <input type="text" class="form-control" id="delete-address" disabled>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">E-mail</label>
                                 <input type="text" class="form-control" id="delete-email" disabled>
                             </div>
-                            <button type="submit" class="btn btn-danger">Delete Customer</button>
+                            <button type="submit" class="btn btn-danger">Excluir Cliente</button>
                         </form>
                     </div>
 
                 </div>
 
-                <!-- Right: table -->
+                <!-- Direita: tabela -->
                 <div class="col-6 ps-4">
-                    <h6 class="mb-3">Customer table</h6>
+                    <h6 class="mb-3">Tabela de Clientes</h6>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Telephone</th>
-                                    <th>Address</th>
-                                    <th>Email</th>
-                                    <th>Last Modified</th>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>Endereço</th>
+                                    <th>E-mail</th>
+                                    <th>Última Modificação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -148,7 +148,7 @@
                                     <td>{{ c.last_modified or '' }}</td>
                                 </tr>
                                 {% else %}
-                                <tr><td colspan="6" class="text-center text-muted">No customers yet.</td></tr>
+                                <tr><td colspan="6" class="text-center text-muted">Nenhum cliente cadastrado.</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -192,7 +192,7 @@ function postForm(formId, url, resetOnSuccess) {
                 if (resetOnSuccess) form.reset();
                 location.reload();
             } else {
-                alert('Error: ' + JSON.stringify(data));
+                alert('Erro: ' + JSON.stringify(data));
             }
         });
 }
@@ -205,7 +205,7 @@ document.getElementById('form-add').addEventListener('submit', function(e) {
 document.getElementById('form-edit').addEventListener('submit', function(e) {
     e.preventDefault();
     if (!document.getElementById('edit-id').value) {
-        alert('Select a customer first.');
+        alert('Selecione um cliente primeiro.');
         return;
     }
     postForm('form-edit', '/clients/update', false);
@@ -214,10 +214,10 @@ document.getElementById('form-edit').addEventListener('submit', function(e) {
 document.getElementById('form-delete').addEventListener('submit', function(e) {
     e.preventDefault();
     if (!document.getElementById('delete-id').value) {
-        alert('Select a customer first.');
+        alert('Selecione um cliente primeiro.');
         return;
     }
-    if (confirm('Delete this customer? This action cannot be undone.')) {
+    if (confirm('Excluir este cliente? Esta ação não pode ser desfeita.')) {
         postForm('form-delete', '/clients/delete', false);
     }
 });
