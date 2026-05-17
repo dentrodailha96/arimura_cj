@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +11,9 @@
 <nav class="navbar navbar-dark bg-dark px-3">
     <span class="navbar-brand fw-semibold">Arimura CJ</span>
     <div class="d-flex gap-2">
-        <a href="/clients" class="btn btn-sm {% if active_page == 'clients' %}btn-light{% else %}btn-outline-light{% endif %}">Clients</a>
-        <a href="/products" class="btn btn-sm {% if active_page == 'products' %}btn-light{% else %}btn-outline-light{% endif %}">Products</a>
-        <a href="/orders/new" class="btn btn-sm {% if active_page == 'orders' %}btn-light{% else %}btn-outline-light{% endif %}">Orders</a>
+        <a href="/clients" class="btn btn-sm {% if active_page == 'clients' %}btn-light{% else %}btn-outline-light{% endif %}">Clientes</a>
+        <a href="/products" class="btn btn-sm {% if active_page == 'products' %}btn-light{% else %}btn-outline-light{% endif %}">Produtos</a>
+        <a href="/orders/new" class="btn btn-sm {% if active_page == 'orders' %}btn-light{% else %}btn-outline-light{% endif %}">Pedidos</a>
     </div>
 </nav>
 {% block content %}{% endblock %}

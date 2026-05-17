@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Products{% endblock %}
+{% block title %}Produtos{% endblock %}
 
 {% block extra_styles %}
 <style>
@@ -13,48 +13,48 @@
 
 {% block content %}
 <div class="container-fluid py-3">
-    <h4 class="mb-3">Products</h4>
+    <h4 class="mb-3">Produtos</h4>
     <div class="card">
         <div class="card-body">
             <div class="row g-0">
 
-                <!-- Left: navigation -->
+                <!-- Esquerda: navegação -->
                 <div class="col-2 border-end pe-3">
-                    <button class="btn btn-outline-primary nav-btn active" onclick="showSection('add', this)">Add new product</button>
-                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('edit', this)">Edit Product</button>
-                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('delete', this)">Delete Product</button>
+                    <button class="btn btn-outline-primary nav-btn active" onclick="showSection('add', this)">Adicionar novo produto</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('edit', this)">Editar Produto</button>
+                    <button class="btn btn-outline-primary nav-btn" onclick="showSection('delete', this)">Excluir Produto</button>
                 </div>
 
-                <!-- Center: forms -->
+                <!-- Centro: formulários -->
                 <div class="col-4 border-end px-4">
 
-                    <!-- Add -->
+                    <!-- Adicionar -->
                     <div id="section-add" class="section active">
-                        <h6 class="mb-3">Add new product form</h6>
+                        <h6 class="mb-3">Formulário de novo produto</h6>
                         <form id="form-add">
                             <div class="mb-2">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" name="p_nome" required>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Price</label>
+                                <label class="form-label">Preço</label>
                                 <input type="number" class="form-control" name="p_price_product" step="0.01" min="0" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Sales Unit</label>
-                                <input type="text" class="form-control" name="p_sales_unit" placeholder="e.g. kg, unit, dozen">
+                                <label class="form-label">Unidade de Venda</label>
+                                <input type="text" class="form-control" name="p_sales_unit" placeholder="ex: kg, unidade, dúzia">
                             </div>
-                            <button type="submit" class="btn btn-primary">Add new product</button>
+                            <button type="submit" class="btn btn-primary">Adicionar novo produto</button>
                         </form>
                     </div>
 
-                    <!-- Edit -->
+                    <!-- Editar -->
                     <div id="section-edit" class="section">
-                        <h6 class="mb-3">Edit product</h6>
+                        <h6 class="mb-3">Editar Produto</h6>
                         <div class="mb-3">
-                            <label class="form-label">Id_Product</label>
+                            <label class="form-label">ID do Produto</label>
                             <select class="form-select" id="edit-select" onchange="loadProduct('edit', this.value)">
-                                <option value="">-- select --</option>
+                                <option value="">-- selecionar --</option>
                                 {% for p in products %}
                                 <option value="{{ p.id_product }}">{{ p.id_product }} – {{ p.name }}</option>
                                 {% endfor %}
@@ -63,28 +63,28 @@
                         <form id="form-edit">
                             <input type="hidden" name="p_id_product" id="edit-id">
                             <div class="mb-2">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" name="p_nome" id="edit-name">
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Price</label>
+                                <label class="form-label">Preço</label>
                                 <input type="number" class="form-control" name="p_price_product" id="edit-price" step="0.01" min="0">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Sales Unit</label>
+                                <label class="form-label">Unidade de Venda</label>
                                 <input type="text" class="form-control" name="p_sales_unit" id="edit-sales_unit">
                             </div>
-                            <button type="submit" class="btn btn-warning">Edit Product</button>
+                            <button type="submit" class="btn btn-warning">Editar Produto</button>
                         </form>
                     </div>
 
-                    <!-- Delete -->
+                    <!-- Excluir -->
                     <div id="section-delete" class="section">
-                        <h6 class="mb-3">Delete Product</h6>
+                        <h6 class="mb-3">Excluir Produto</h6>
                         <div class="mb-3">
-                            <label class="form-label">Id Product</label>
+                            <label class="form-label">ID do Produto</label>
                             <select class="form-select" id="delete-select" onchange="loadProduct('delete', this.value)">
-                                <option value="">-- select --</option>
+                                <option value="">-- selecionar --</option>
                                 {% for p in products %}
                                 <option value="{{ p.id_product }}">{{ p.id_product }} – {{ p.name }}</option>
                                 {% endfor %}
@@ -93,35 +93,35 @@
                         <form id="form-delete">
                             <input type="hidden" name="p_id_product" id="delete-id">
                             <div class="mb-2">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" id="delete-name" disabled>
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Price</label>
+                                <label class="form-label">Preço</label>
                                 <input type="text" class="form-control" id="delete-price" disabled>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Sales Unit</label>
+                                <label class="form-label">Unidade de Venda</label>
                                 <input type="text" class="form-control" id="delete-sales_unit" disabled>
                             </div>
-                            <button type="submit" class="btn btn-danger">Delete Product</button>
+                            <button type="submit" class="btn btn-danger">Excluir Produto</button>
                         </form>
                     </div>
 
                 </div>
 
-                <!-- Right: table -->
+                <!-- Direita: tabela -->
                 <div class="col-6 ps-4">
-                    <h6 class="mb-3">Product table</h6>
+                    <h6 class="mb-3">Tabela de Produtos</h6>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Sales Unit</th>
-                                    <th>Last Modified</th>
+                                    <th>Nome</th>
+                                    <th>Preço</th>
+                                    <th>Unidade de Venda</th>
+                                    <th>Última Modificação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -134,7 +134,7 @@
                                     <td>{{ p.last_modified or '' }}</td>
                                 </tr>
                                 {% else %}
-                                <tr><td colspan="5" class="text-center text-muted">No products yet.</td></tr>
+                                <tr><td colspan="5" class="text-center text-muted">Nenhum produto cadastrado.</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -177,7 +177,7 @@ function postForm(formId, url, resetOnSuccess) {
                 if (resetOnSuccess) form.reset();
                 location.reload();
             } else {
-                alert('Error: ' + JSON.stringify(data));
+                alert('Erro: ' + JSON.stringify(data));
             }
         });
 }
@@ -190,7 +190,7 @@ document.getElementById('form-add').addEventListener('submit', function(e) {
 document.getElementById('form-edit').addEventListener('submit', function(e) {
     e.preventDefault();
     if (!document.getElementById('edit-id').value) {
-        alert('Select a product first.');
+        alert('Selecione um produto primeiro.');
         return;
     }
     postForm('form-edit', '/products/update', false);
@@ -199,10 +199,10 @@ document.getElementById('form-edit').addEventListener('submit', function(e) {
 document.getElementById('form-delete').addEventListener('submit', function(e) {
     e.preventDefault();
     if (!document.getElementById('delete-id').value) {
-        alert('Select a product first.');
+        alert('Selecione um produto primeiro.');
         return;
     }
-    if (confirm('Delete this product? This action cannot be undone.')) {
+    if (confirm('Excluir este produto? Esta ação não pode ser desfeita.')) {
         postForm('form-delete', '/products/delete', false);
     }
 });
