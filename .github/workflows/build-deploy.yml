@@ -28,8 +28,9 @@ jobs:
             | xargs -r -I {} doctl registry repository delete-tag arimura-cj {} --force || true
         
       - name: Push image to registry
-        run: echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} --password-stdin
-           docker push ${{ vars.REGISTRY }}/arimura-cj:latest
+        run: |
+          echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | docker login registry.digitalocean.com -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} --password-stdin
+          docker push ${{ vars.REGISTRY }}/arimura-cj:latest
 
   deploy:
     runs-on: ubuntu-latest
