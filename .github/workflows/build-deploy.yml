@@ -25,10 +25,11 @@ jobs:
       - name: Clean old images from registry
         run: |
           doctl registry repository list-tags arimura-cj \
-            --no-header --format Tag \
+            --no-header \
+            --format Tag \
+            --output text \
             | xargs -r -I {} doctl registry repository delete-tag arimura-cj {} --force || true
-          doctl registry garbage-collection start --include-untagged-manifests --force
-
+        
       - name: Push image to registry
         run: docker push ${{ vars.REGISTRY }}/arimura-cj:latest
 
