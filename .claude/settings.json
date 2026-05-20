@@ -5,8 +5,8 @@
         "matcher": ".*",
         "hooks": [
           {
-            // "type": "command",
-            // "command": "python3 ~/Documents/Projects/ARIMURA/arimura_cj/.claude/protect.py"
+            "type": "command",
+            "command": "python3 ~/Documents/Projects/arimura_cj/.claude/protect.py"
           }
         ]
       }
