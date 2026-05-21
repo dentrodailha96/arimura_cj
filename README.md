@@ -15,7 +15,7 @@ Improve by practice infrastructure and CICD knowledge.
 ### Technologies used
 
 - **Frontend**: HTML
-- **Backend**: Python
+- **Backend**: Python (Flask)
 - **Database**: NEON Database (PostgresSQL)
 - **Containers**: Docker
 - **VM / Cloud Provider**: Digital Ocean (Ubuntu 24.04)
