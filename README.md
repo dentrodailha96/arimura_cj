@@ -57,20 +57,23 @@ FLASK_DEBUG =
 
 ### Folder Structure
 
-arimura_cj 
-    > .claude {Folder created to use claude code in this project and add the hookers.}
-    > .config {Connection function to access the database.}
-    > .github/workflows {Add the CICD yml files.}
-    > docs {Wireframes and images about the project.}
-    > routes {Python backend of the project.}
-    > sql {Sql queries to create the table structure.}
-    > templates {Html fronend files.}
-    > .gitignore {File to list all the files which git can ignore in commits.}
-    > Dockerfile {Docker file to create the docker images.}
-    > requirements.txt {Base libraries to use the project.}
-    > site.py {Backend .py that combine all the files from routes and delivery the end application.}
+```
+arimura_cj/
+├── .claude/           # Claude Code configuration and hooks
+├── .config/           # Database connection utilities
+├── .github/
+│   └── workflows/     # GitHub Actions CI/CD pipeline definitions
+├── docs/              # Project documentation and diagrams
+├── routes/            # Flask route handlers (backend logic)
+├── sql/               # SQL schema definition files
+├── templates/         # HTML frontend templates
+├── .gitignore         # Git ignore rules
+├── Dockerfile         # Docker image definition
+├── requirements.txt   # Python dependencies
+└── site.py            # Application entry point (combines all routes)
+```
 
-## Hooks
+## Claude Hooks - Data protection
 `.claude/settings.json` defines a `PreToolUse` hook that runs `.claude/protect.py` before every tool call. This script blocks Claude from accessing `.env` and `.gitignore`.
 
 ## Database Architecture 
