@@ -23,6 +23,10 @@ Improve by practice infrastructure and CICD knowledge.
 
 **Extra**: Claude Code
 
+### Infrastructure architecture
+
+<img width="736" height="1163" alt="Project_Notes" src="https://github.com/user-attachments/assets/9fe111d7-619b-4b51-a9bf-72e69216b1c0" />
+
 ## Setup
 
 In order to run this project locally, it is important to run through Docker. 
@@ -69,6 +73,16 @@ arimura_cj
 ## Hooks
 `.claude/settings.json` defines a `PreToolUse` hook that runs `.claude/protect.py` before every tool call. This script blocks Claude from accessing `.env` and `.gitignore`.
 
-## Infrastructure architecture
+## Database Architecture 
 
-<img width="736" height="1163" alt="Project_Notes" src="https://github.com/user-attachments/assets/9fe111d7-619b-4b51-a9bf-72e69216b1c0" />
+- The database was focused on ACID properties. 
+
+<img src="docs/database.png" alt="Database Schema" />
+
+## CICD 
+
+- Given the dimension of this project, I decided to go only with a Production and Development environment. The split was done using two branches and defining the local developments as development environment and everything in the VM as production, therefore all the .env documents are adjusted to be connected with the respective databases. 
+
+- The CICD only runs once the manual merge request is done. 
+
+<img src="docs/CICD.png" alt="CICD" />

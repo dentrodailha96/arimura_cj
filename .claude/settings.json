@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/Documents/Projects/arimura_cj/.claude/protect.py"
+            "command": "python3 ~/Documents/projects/arimura_cj/.claude/protect.py"
           }
         ]
       }
