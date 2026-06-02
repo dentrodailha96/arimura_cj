@@ -205,12 +205,26 @@
                     {% elif active == 'production' %}
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="mb-0">Produção</h6>
-                        <form class="d-flex gap-2 align-items-center" method="GET" action="/orders/production">
+                        <form class="d-flex gap-2 align-items-center flex-wrap" method="GET" action="/orders/production">
                             <input type="date" class="form-control form-control-sm" name="from_date" value="{{ from_date }}">
                             <span class="text-muted">até</span>
                             <input type="date" class="form-control form-control-sm" name="to_date" value="{{ to_date }}">
+                            <span class="text-muted ms-2">hora</span>
+                            <select class="form-select form-select-sm" name="from_time" style="width:auto">
+                                <option value="">--</option>
+                                {% for h in range(9, 24) %}{% for m in [0, 15, 30, 45] %}
+                                <option value="{{ '%02d:%02d'|format(h, m) }}" {% if '%02d:%02d'|format(h, m) == from_time %}selected{% endif %}>{{ '%02d:%02d'|format(h, m) }}</option>
+                                {% endfor %}{% endfor %}
+                            </select>
+                            <span class="text-muted">até</span>
+                            <select class="form-select form-select-sm" name="to_time" style="width:auto">
+                                <option value="">--</option>
+                                {% for h in range(9, 24) %}{% for m in [0, 15, 30, 45] %}
+                                <option value="{{ '%02d:%02d'|format(h, m) }}" {% if '%02d:%02d'|format(h, m) == to_time %}selected{% endif %}>{{ '%02d:%02d'|format(h, m) }}</option>
+                                {% endfor %}{% endfor %}
+                            </select>
                             <button type="submit" class="btn btn-sm btn-primary">Ver Produção</button>
-                            {% if from_date or to_date %}
+                            {% if from_date or to_date or from_time or to_time %}
                             <a href="/orders/production" class="btn btn-sm btn-outline-secondary">Limpar</a>
                             {% endif %}
                         </form>

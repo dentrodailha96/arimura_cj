@@ -163,21 +163,28 @@ def order_detailed():
 def production():
     from_date = request.args.get('from_date', '')
     to_date = request.args.get('to_date', '')
+    from_time = request.args.get('from_time', '')
+    to_time = request.args.get('to_time', '')
     with_obs = []
     without_obs = []
     if from_date and to_date:
         conn = get_connection()
         cur = conn.cursor()
+        params = [from_date, to_date]
+        time_filter = ''
+        if from_time and to_time:
+            time_filter = ' AND o.delivery_time BETWEEN %s AND %s'
+            params += [from_time, to_time]
         cur.execute(
-            """SELECT op.id, op.id_order, p.name AS product_name,
+            f"""SELECT op.id, op.id_order, p.name AS product_name,
                       op.quantity, p.sales_unit, op.observation, op.status,
                       o.delivery_date, o.delivery_time, op.created_at
                FROM arimura_cj.order_product op
                JOIN arimura_cj.orders o ON op.id_order = o.id_order
                JOIN arimura_cj.products p ON op.id_product = p.id_product
-               WHERE o.delivery_date BETWEEN %s AND %s
+               WHERE o.delivery_date BETWEEN %s AND %s{time_filter}
                ORDER BY o.delivery_date, o.delivery_time, p.name""",
-            (from_date, to_date)
+            params
         )
         cols = ['id', 'id_order', 'product_name', 'quantity', 'sales_unit',
                 'observation', 'status', 'delivery_date', 'delivery_time', 'created_at']
@@ -193,7 +200,9 @@ def production():
         with_obs=with_obs,
         without_obs=without_obs,
         from_date=from_date,
-        to_date=to_date
+        to_date=to_date,
+        from_time=from_time,
+        to_time=to_time
     )
 
 
